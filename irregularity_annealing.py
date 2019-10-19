@@ -36,7 +36,7 @@ def maxSigmaRatio_bruteforce(n):
     """
     nodes = list(range(n))
     alledges = list(combinations(nodes, 2))
-    max_pair = 0, None
+    max_pair = None, 0
     for m in range(n):
         for edges in combinations(alledges, m):
             G = nx.Graph()
@@ -44,8 +44,8 @@ def maxSigmaRatio_bruteforce(n):
             G.add_edges_from(edges)
 
             rG = sigmaRatio(G)
-            if rG > max_pair[0]:
-                max_pair = rG, G
+            if rG > max_pair[1]:
+                max_pair = G, rG
     
     return max_pair
 
@@ -70,11 +70,10 @@ def disturbGraph(G):
         rem_edge = choice(edges)
         G.remove_edge(*rem_edge)
 
-    voidFun = lambda: 0
     if len(edges) == n * (n - 1) // 2:
-        addRandomEdge = voidFun
+        return removeRandomEdge()
     elif len(edges) == 0:
-        removeRandomEdge = voidFun
+        return addRandomEdge()
 
     choice([
         removeRandomEdge,
@@ -85,7 +84,7 @@ def disturbGraph(G):
         )
     ])()
 
-def maxSigmaRatio_annealing(n, nsim, temperature=None):
+def maxSigmaRatio_annealing(n, nsim, t=1, dt=0.98):
     """
     implements the simulated annealing
     algorithm
@@ -98,21 +97,21 @@ def maxSigmaRatio_annealing(n, nsim, temperature=None):
             tested graphs
             
     :params -- keyworded
-        function temperature
-            decreasing function
-            describing the temperature
-            lowering process
+        float t
+            starting temperature
+        float dt
+            temperature change
+            at each iteration
     """
-    temperature = temperature or (lambda i: 1 / log(i))
-    prob = lambda ci, cr, t: pow(e, (cr - ci) / t)
-    
-    _t = nx.gnm_random_graph(n, randint(1, n))
+    prob = lambda ci, cr, t: pow(e, (ci - cr) / t)
+    m = randint(n - 1, n * (n - 1) // 2)
+    _t = nx.gnm_random_graph(n, randint(n-1, m))
     bes = (_t, sigmaRatio(_t))
     cur = (_t.copy(), bes[1])
     curi = _t.copy()
 
     for i in range(2, nsim + 2):
-        t = temperature(i)
+        t *= dt
         disturbGraph(curi)
         sri = sigmaRatio(curi)
 
@@ -129,11 +128,16 @@ def maxSigmaRatio_annealing(n, nsim, temperature=None):
 
 def simpleDraw(G):
     pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(G, pos)
-    nx.draw_networkx_edges(G, pos, node_list = G.edges(), edge_color='r')
+    nx.draw_networkx_nodes(
+        G, pos, node_size=5,
+        node_color='red'
+    )
+    nx.draw_networkx_edges(G, pos)
     plt.show()
 
 
 if __name__ == '__main__':
-    g, r = maxSigmaRatio_annealing(10, 100)
+    #g, r = maxSigmaRatio_annealing(30, 1000)
+    g, r = maxSigmaRatio_bruteforce(7)
+    print(r)
     simpleDraw(g)
