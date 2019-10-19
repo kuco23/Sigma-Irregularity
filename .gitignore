@@ -1,3 +1,8 @@
 # gitignore
 __pycache__
 *.exe
+*.gz
+*.tex
+*.pdf
+.ipynb_checkpoints
+env
