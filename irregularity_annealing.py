@@ -1,4 +1,4 @@
-from math import e, log
+from math import log, exp
 from random import randint, random
 from itertools import combinations
 
@@ -48,7 +48,9 @@ def maxSigmaRatio_bruteforce(n):
     
     return max_pair
 
-def maxSigmaRatio_annealing(n, nsim, temperature=1):
+def maxSigmaRatio_annealing(
+    n, nsim, starting_edges=0, temperature=1
+):
     """
     implements the simulated annealing
     algorithm
@@ -64,30 +66,31 @@ def maxSigmaRatio_annealing(n, nsim, temperature=1):
         float temperature
             starting temperature
     """
-    m = n * (n - 1) // 2
-    prob = lambda ci, cr, t: pow(e, (ci - cr) / t)
+    m_total = n * (n - 1) // 2
+    
+    prob = lambda ci, cr, t: exp((ci - cr) / t)
     temp = lambda i: temperature / log(i)
-    random_graph = lambda: nx.gnm_random_graph(
-        n, randint(1, m)
+    rand_graph = lambda m=0: nx.gnm_random_graph(
+        n, m or randint(1, m_total)
     )
     
-    _t = random_graph()
-    bes = (_t, sigmaRatio(_t))
-    cur = (_t.copy(), bes[1])
-    curi = _t.copy()
+    curi = nx.gnm_random_graph(n, starting_edges)
+    sri = sigmaRatio(curi)
+    bes = (curi.copy(), sri)
+    cur = (curi.copy(), sri)
 
     for i in range(2, nsim + 2):
         t = temp(i)
-        curi = random_graph()
+        curi = rand_graph()
         sri = sigmaRatio(curi)
 
         if sri >= cur[1]:
-            cur = (curi.copy(), sri)
+            cur = (curi, sri)
             if sri > bes[1]:
-                bes = (curi.copy(), sri)
+                bes = (curi, sri)
 
         elif prob(sri, cur[1], t) > random():
-            cur = (curi.copy(), sri)
+            cur = (curi, sri)
 
     return bes
     
@@ -103,6 +106,6 @@ def simpleDraw(G):
 
 
 if __name__ == '__main__':
-    g, r = maxSigmaRatio_annealing(30, 1000)
+    g, r = maxSigmaRatio_annealing(30, 10000, temperature=5)
     print(r)
     simpleDraw(g)
