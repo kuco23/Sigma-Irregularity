@@ -12,6 +12,11 @@
 using std::vector;
 using std::pow;
 
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_real_distribution<double> real_dis(0, 1);
+std::uniform_int_distribution<int> int_dis;
+
 namespace base_defs {
 
     int sigma(vector<vector<int>> &G) {
@@ -48,37 +53,35 @@ namespace base_defs {
 double probability(int sigma_i, int sigma_c, double t) {
     return std::exp((sigma_i - sigma_c) / t);
 }
-
 double random01() {
-    return (double) std::rand() / RAND_MAX;
+    return (double) real_dis(gen);
+}
+double randint(int a, int b) {
+    return std::round(random01() * (b - a) + a);
 }
 
-vector<vector<int>> randomGraph(int n, int m) {
-    std::random_device rd;
-    std::mt19937 generator(rd());
+vector<vector<int>> randomGraph(int n, int m) 
+{
+    int lim = std::round(n * (n - 1) / 2);
 
+    std::random_device rd;
+    static vector<int> ids(lim);
     vector<vector<int>> neighbor_list(n);
 
-    vector<int> sample1{};
-    vector<int> sample2{};
-    for (int i = 0; i < n; i++) {
-        sample1.push_back(i);
-        sample2.push_back(i);
-    }
- 
-    std::shuffle(
-        sample1.begin(), sample1.end(), rd
-    );
-    std::shuffle(
-        sample2.begin(), sample2.end(), rd
-    );
+    int p = 0;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < i; j++)
+            ids[p++] = i * n + j; 
 
-    for (int i : sample1)
-        for (int j : sample2)
-            if (j < i) {
-                neighbor_list[j].push_back(i);
-                neighbor_list[i].push_back(j);
-            }
+    std::shuffle(ids.begin(), ids.end(), rd);
+
+    for (int i = 0; i < m; i++) {
+        int id = ids[i];
+        int enter_node = id % n;
+        int exit_node = std::floor((double) id / n);
+        neighbor_list[enter_node].push_back(exit_node);
+        neighbor_list[exit_node].push_back(enter_node);
+    }
     
     return neighbor_list;
 }
@@ -86,25 +89,21 @@ vector<vector<int>> randomGraph(int n, int m) {
 std::pair<vector<vector<int>>, int>
 annealing(int n, int nsim) 
 {
-    std::random_device rd;
-    std::mt19937 generator(rd());
+    int m_total = n * (n - 1) / 2;
+    int G_ratio;
 
     vector<vector<int>> G;
     std::pair<vector<vector<int>>, int> bestG;
     std::pair<vector<vector<int>>, int> currG;
-    int m_total = n * (n - 1) / 2;
-
-    std::uniform_int_distribution<std::mt19937::result_type> 
-    distr(1, m_total-1);
 
     G = randomGraph(n, 2 * n);
-    int G_ratio = base_defs::sigma_ratio(G);
+    G_ratio = base_defs::sigma_ratio(G);
     bestG = std::make_pair(G, G_ratio);
     currG = std::make_pair(G, G_ratio);
 
-    for (int i = 2; i < nsim + 2; i ++) {
+    for (int i = 2; i < nsim + 2; i++) {
         double temp = 1 / std::log(i);
-        G = randomGraph(n, distr(generator));
+        G = randomGraph(n, randint(1, m_total-1));
         G_ratio = base_defs::sigma_ratio(G);
 
         if (G_ratio >= currG.second) {
@@ -128,16 +127,18 @@ annealing(int n, int nsim)
     return bestG;
 }
 
+void graphRepr(vector<vector<int>> &G) {
+    std::cout << "printing graph" << std::endl;
+    for (vector<int> &node : G) {
+        for (int &i : node) 
+            std::cout << i << " ";
+        std::cout << std::endl;
+    }
+    std::cout << "exit function" << std::endl;
+}
+
 int main() {
-    std::srand(std::time(0));
-    vector<vector<int>> G = {
-        {1, 2, 3}, 
-        {0, 4},
-        {0, 4, 3},
-        {0, 4, 2},
-        {1, 2, 3}
-    };
-    std::pair<vector<vector<int>>, int> s = annealing(100, 100);
+    std::pair<vector<vector<int>>, int> s = annealing(30, 10000);
     std::cout << s.second << std::endl;
     std::getchar();
     return 0;
