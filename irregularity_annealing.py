@@ -106,6 +106,6 @@ def simpleDraw(G):
 
 
 if __name__ == '__main__':
-    g, r = maxSigmaRatio_annealing(30, 10000, temperature=5)
+    g, r = maxSigmaRatio_annealing(30, 1000, temperature=2)
     print(r)
     simpleDraw(g)

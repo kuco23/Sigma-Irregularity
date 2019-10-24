@@ -32,6 +32,17 @@
             "windows": {
                 "command": "python -i \\\"${file}\\\""
             }
+        },
+        {
+            "label": "g++",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "windows": {
+                "command": "g++ \\\"${file}\\\""
+            }
         }
     ]
 }
