@@ -94,18 +94,3 @@ def maxSigmaRatio_annealing(
 
     return bes
     
-
-def simpleDraw(G):
-    pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(
-        G, pos, node_size=5,
-        node_color='red'
-    )
-    nx.draw_networkx_edges(G, pos)
-    plt.show()
-
-
-if __name__ == '__main__':
-    g, r = maxSigmaRatio_annealing(30, 1000, temperature=2)
-    print(r)
-    simpleDraw(g)
