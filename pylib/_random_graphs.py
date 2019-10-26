@@ -1,16 +1,17 @@
 from operator import eq
 from itertools import combinations
-import numpy as np
+from random import randint
+from numpy.random import shuffle
 
 def _randomCombinations(L):
     combs = list(combinations(L, 2))
-    np.random.shuffle(combs)
+    shuffle(combs)
     yield from combs
 
-def randomConnectedGraph_kruskal(n, m):
+def randomConnectedGraph_kruskal_generator(n, m):
+    edge_iter = _randomCombinations(range(n))
     parent = list(range(n))
-    edge_iter = _randomCombinations(parent)
-    edges, ccount = [], 0
+    graph = [[] for _ in range(n)]
     chaos_edges = m - (n - 1)
 
     def getSource(u):
@@ -22,28 +23,30 @@ def randomConnectedGraph_kruskal(n, m):
             parent[v] = u
         return u
 
-    def joinComponents(c1, c2):
+    def joinSources(c1, c2):
         parent[c1] = c2
 
+    ccount, allcount = 0, 0
     for u, v in edge_iter:
         sources = list(map(getSource, (u, v)))
         if not eq(*sources):
-            joinComponents(*sources)
+            joinSources(*sources)
             ccount += 1
-        elif len(edges) - ccount >= chaos_edges: continue
-        elif len(edges) >= m: break
-        edges.append((u, v))
+        elif allcount >= m: break
+        elif allcount - ccount >= chaos_edges: continue
+        allcount += 1
+        yield (u, v)
 
-    return edges
+    return graph
 
 
 def randomTree(n):
     nodes = list(range(n))
-    edges = []
+    graph = [[] for _ in nodes]
     shuffle(nodes)
     for i in range(1, n):
         j = nodes[i]
         k = nodes[randint(0, i-1)]
-        edges.append((j, k))
+        graph[j].append(k), graph[k].append(j)
     return graph
     

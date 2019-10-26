@@ -1,9 +1,14 @@
 from math import log, exp
 from random import randint, random
-from itertools import combinations
+from itertools import combinations, product
 
 import matplotlib.pyplot as plt
 import networkx as nx
+
+from ._neighbor import bridges_bfs, nonedges_bfs
+from ._random_graphs import (
+    randomConnectedGraph_kruskal_generator
+)
 
 def sigma(G):
     sm = 0
@@ -21,7 +26,7 @@ def sigma_t(G):
 
 def sigmaRatio(G):
     sG, stG = sigma(G), sigma_t(G)
-    return stG / sG if sG > 0 else 1
+    return stG / sG if sG > 0 else 0
         
 def maxSigmaRatio_bruteforce(n):
     """
@@ -48,9 +53,43 @@ def maxSigmaRatio_bruteforce(n):
     
     return max_pair
 
-def maxSigmaRatio_annealing(
-    n, nsim, starting_edges=0, temperature=1
-):
+def newState(G):
+    node = randint(0, len(G) - 1)
+    remove = bridges_bfs(G, node, 1)
+    add = nonedges_bfs(G, node, 5)
+    opt_ratio, opt_edge_alt = 0, (None, None)
+
+    def edgeAlter(edge_add, edge_rem):
+        if edge_add is not None:
+            G.add_edge(*edge_add)
+        if edge_rem is not None:
+            G.remove_edge(*edge_rem)
+
+    def testEdgeReplacement(edge_add, edge_rem):
+        edgeAlter(edge_add, edge_rem)
+        r = sigmaRatio(G)
+        edgeAlter(edge_rem, edge_add)
+        return r
+
+    for aedge, redge in product(
+        add + [None], remove + [None]
+    ):
+        r = testEdgeReplacement(aedge, redge)
+        if opt_ratio < r:
+            opt_ratio = r
+            opt_edge_alt = (aedge, redge)
+
+    edgeAlter(*opt_edge_alt)
+
+
+def randomConnectedGraph(n, m):
+    g = nx.Graph()
+    g.add_nodes_from(range(n))
+    gen = randomConnectedGraph_kruskal_generator(n, m)
+    for u, v in gen: g.add_edge(u, v)
+    return g
+    
+def maxSigmaRatio_annealing(n, nsim, temperature=1):
     """
     implements the simulated annealing
     algorithm
@@ -74,23 +113,26 @@ def maxSigmaRatio_annealing(
         n, m or randint(1, m_total)
     )
     
-    curi = nx.gnm_random_graph(n, starting_edges)
+    curi = randomConnectedGraph(
+        n, randint(0, m_total)
+    )
     sri = sigmaRatio(curi)
     bes = (curi.copy(), sri)
     cur = (curi.copy(), sri)
 
     for i in range(2, nsim + 2):
+        print(bes[1])
         t = temp(i)
-        curi = rand_graph()
+        newState(curi)
         sri = sigmaRatio(curi)
 
         if sri >= cur[1]:
-            cur = (curi, sri)
+            cur = (curi.copy(), sri)
             if sri > bes[1]:
-                bes = (curi, sri)
+                bes = (curi.copy(), sri)
 
         elif prob(sri, cur[1], t) > random():
-            cur = (curi, sri)
+            cur = (curi.copy(), sri)
 
     return bes
     
