@@ -24,6 +24,7 @@ def alterState(G):
     ...
     pass
 
-g, r = maxSigmaRatio_annealing(30, 1000, 1000)
+
+g, r = maxSigmaRatio_annealing(30, 100, 1000)
 print('maximum ratio:', r)
 simplePlot(g) # narise graf, ki ga vrne maxSigmaRatio_annealing

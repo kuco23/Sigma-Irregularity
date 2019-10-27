@@ -1,12 +1,11 @@
 from math import log, exp
-from random import randint, random, choice
-from itertools import combinations, product
+from random import random
 
 import matplotlib.pyplot as plt
 import networkx as nx
 
 from ._base_defs import sigmaRatio
-from ._edge_selection import bridges_bfs, nonedges_bfs
+from ._edge_selection import nonbridges_bfs, nonedges_bfs
 from ._random_graphs import (
     randomConnectedGraph_kruskal_generator
 )
@@ -19,10 +18,10 @@ def randomConnectedGraph(n, m):
     return g
 
 def newState(G):
-    node = randint(0, len(G) - 1)
+    node = randint(0, G.order() - 1)
     
-    remove = bridges_bfs(G, node, 2)
-    add = nonedges_bfs(G, node, 2)
+    remove = nonbridges_bfs(G, node, 1)
+    add = nonedges_bfs(G, node, 1)
 
     def testRemoval(edge):
         G.remove_edge(*edge)
@@ -42,48 +41,24 @@ def newState(G):
     if opt_rem >= opt_add:
         G.remove_edge(*opt_rem[1])
     else:
-        G.add_edge(*opt_rem[1])
+        G.add_edge(*opt_add[1])
     
 def maxSigmaRatio_annealing(
     n, nsim, temperature=1, alterState=newState
 ):
-    """
-    implements the simulated annealing
-    algorithm
-    
-    :params -- positional
-        int n
-            graph vertices number
-        int nsim
-            number of randomly
-            tested graphs
-            
-    :params -- keyworded
-        :params -- keyworded
-        function temperature
-            starting temperature
-        function alterState
-            function altering its
-            argument to produce
-            graph's neighbor
-    """
     m_total = n * (n - 1) // 2
     
     prob = lambda ci, cr, t: exp((ci - cr) / t)
     temp = lambda i: temperature / log(i)
-    rand_graph = lambda: nx.gnm_random_graph(
-        n, randint(n, m_total)
-    )
     
     curi = randomConnectedGraph(
-        n, randint(0, m_total)
+        n, n - 1
     )
     sri = sigmaRatio(curi)
     bes = (curi.copy(), sri)
     cur = (curi.copy(), sri)
 
     for i in range(2, nsim + 2):
-        print(bes[1])
         t = temp(i)
         alterState(curi)
         sri = sigmaRatio(curi)

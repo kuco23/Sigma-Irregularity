@@ -47,6 +47,7 @@ def randomTree(n):
     for i in range(1, n):
         j = nodes[i]
         k = nodes[randint(0, i-1)]
-        graph[j].append(k), graph[k].append(j)
+        graph[j].append(k)
+        graph[k].append(j)
     return graph
     
