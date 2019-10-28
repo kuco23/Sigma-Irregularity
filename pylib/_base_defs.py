@@ -2,15 +2,16 @@ from itertools import combinations
 
 def sigma(G):
     sm = 0
-    for u, v in G.edges():
-        d_u, d_v = map(G.degree, (u, v))
-        sm += pow(d_u - d_v, 2)
-    return sm
+    for u in range(len(G)):
+        for v in G[u]:
+            d_u, d_v = map(len, (G[u], G[v]))
+            sm += pow(d_u - d_v, 2)
+    return sm // 2
 
 def sigma_t(G):
     sm = 0
-    for u, v in combinations(G.nodes(), 2):
-        d_u, d_v = map(G.degree, (u, v))
+    for u, v in combinations(range(len(G)), 2):
+        d_u, d_v = map(len, (G[u], G[v]))
         sm += pow(d_u - d_v, 2)
     return sm
 

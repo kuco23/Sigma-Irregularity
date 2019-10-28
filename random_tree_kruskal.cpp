@@ -21,7 +21,7 @@ int getParent(vector<int> &parent, int i) {
 }
 
 inline void joinComponents(
-    vector<int> &parent, int c0, int c1
+    vector<int> &parent, int &c0, int &c1
 ) {
     parent[c0] = c1;
 }

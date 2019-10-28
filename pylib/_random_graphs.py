@@ -8,7 +8,7 @@ def _randomCombinations(L):
     shuffle(combs)
     yield from combs
 
-def randomConnectedGraph_kruskal_generator(n, m):
+def randomConnectedEdges(n, m):
     edge_iter = _randomCombinations(range(n))
     parent = list(range(n))
     graph = [[] for _ in range(n)]
@@ -26,19 +26,24 @@ def randomConnectedGraph_kruskal_generator(n, m):
     def joinSources(c1, c2):
         parent[c1] = c2
 
-    ccount, allcount = 0, 0
+    edges, ccount = [], 0
     for u, v in edge_iter:
         sources = list(map(getSource, (u, v)))
         if not eq(*sources):
             joinSources(*sources)
             ccount += 1
-        elif allcount >= m: break
-        elif allcount - ccount >= chaos_edges: continue
-        allcount += 1
-        yield (u, v)
+        elif len(edges) >= m: break
+        elif len(edges) - ccount >= chaos_edges: continue
+        edges.append((u, v))
+    
+    return edges
 
+def randomConnectedGraph(n, m):
+    graph = [[] for _ in range(n)]
+    for n1, n2 in randomConnectedEdges(n, m):
+        graph[n1].append(n2)
+        graph[n2].append(n1)
     return graph
-
 
 def randomTree(n):
     nodes = list(range(n))

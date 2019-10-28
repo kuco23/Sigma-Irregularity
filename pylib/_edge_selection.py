@@ -1,6 +1,6 @@
 from collections import deque
 
-def nonbridges_bfs(G, s, lim):
+def nonbridges(G, s, lim):
     nonbridges = set()
     parent = [None] * len(G)
     marked = [False] * len(G)
@@ -19,7 +19,7 @@ def nonbridges_bfs(G, s, lim):
                 queue.append(v)
     return nonbridges
 
-def nonedges_bfs(G, s, lim):
+def nonedges(G, s, lim):
     added_edges = set()
     connected = [False] * len(G)
     marked = [False] * len(G)

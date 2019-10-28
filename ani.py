@@ -8,13 +8,14 @@ from pylib import *
 
 fig, ax = plt.subplots(figsize=(6,4))
 
-G = randomConnectedGraph(30, 200)
+G = nx_randomConnectedGraph(30, 200)
 pos = nx.spring_layout(G)
 
 def update(num):
     ax.clear()
-    
-    G = randomConnectedGraph(30, 100)
+
+    G = nx_randomConnectedGraph(30, randint(30, 200))
+    pos = nx.spring_layout(G)
     nx.draw_networkx_edges(G, pos=pos, alpha=0.5)
     nx.draw_networkx_nodes(G, pos=pos, node_size=7)
 
