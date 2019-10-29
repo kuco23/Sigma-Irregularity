@@ -1,7 +1,8 @@
 from operator import eq
 from itertools import combinations
 from random import randint
-from numpy.random import shuffle
+try: from numpy.random import shuffle
+except ModuleNotFoundError: from random import shuffle
 
 def _randomCombinations(L):
     combs = list(combinations(L, 2))
@@ -28,12 +29,13 @@ def randomConnectedEdges(n, m):
 
     edges, ccount = [], 0
     for u, v in edge_iter:
-        sources = list(map(getSource, (u, v)))
-        if not eq(*sources):
-            joinSources(*sources)
-            ccount += 1
-        elif len(edges) >= m: break
-        elif len(edges) - ccount >= chaos_edges: continue
+        if ccount < n - 1:
+            sources = list(map(getSource, (u, v)))
+            if not eq(*sources):
+                joinSources(*sources)
+                ccount += 1
+        if len(edges) >= m: break
+        if len(edges) - ccount >= chaos_edges: continue
         edges.append((u, v))
     
     return edges

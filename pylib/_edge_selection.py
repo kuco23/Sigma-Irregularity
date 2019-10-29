@@ -1,7 +1,7 @@
 from collections import deque
 
-def nonbridges(G, s, lim):
-    nonbridges = set()
+def nonBridges(G, s, lim):
+    non_bridges = set()
     parent = [None] * len(G)
     marked = [False] * len(G)
     marked[s] = True
@@ -10,16 +10,16 @@ def nonbridges(G, s, lim):
         u = queue.popleft()
         for v in G[u]:
             if marked[v] and parent[u] != v:
-                nonbridges.add((u, v))
-                if len(nonbridges) >= lim:
-                    return nonbridges
+                non_bridges.add((u, v))
+                if len(non_bridges) >= lim:
+                    return non_bridges
             elif not marked[v]:
                 marked[v] = True
                 parent[v] = u
                 queue.append(v)
-    return nonbridges
+    return non_bridges
 
-def nonedges(G, s, lim):
+def nonEdges(G, s, lim):
     added_edges = set()
     connected = [False] * len(G)
     marked = [False] * len(G)

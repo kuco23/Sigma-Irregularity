@@ -1,11 +1,11 @@
-from random import randint
+from random import randint, random
 
 import networkx as nx
 import matplotlib.pyplot as plt
 
 from pylib import (
-    nonedges,
-    nonbridges,
+    sigma, sigma_t, sigmaRatio,
+    nonEdges, nonBridges,
     randomConnectedEdges,
     randomConnectedGraph,
     maxSigmaRatio_annealing
@@ -13,7 +13,7 @@ from pylib import (
 
 def simplePlot(G):
     pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(G, pos, node_size=8)
+    nx.draw_networkx_nodes(G, pos, node_size=5)
     nx.draw_networkx_edges(G, pos)
     plt.show()
 
@@ -30,20 +30,20 @@ def neighborListToNx(G):
 # Ne vrne nicesar, ampak G spreminja lokalno
 def alterState(G):
     order = len(G)
-    nb = nonbridges(G, randint(0, order - 1), 1)
-    ne = nonedges(G, randint(0, order - 1), 1)
-    if nb:
+    nb = nonBridges(G, randint(0, order - 1), 4)
+    ne = nonEdges(G, randint(0, order - 1), 4)
+    if nb and random() < 0.5:
         e1, e2 = nb.pop()
         G[e1].remove(e2)
         G[e2].remove(e1)
-    if ne:
+    elif ne:
         e1, e2 = ne.pop()
         G[e1].append(e2)
         G[e2].append(e1)
 
 
 g, r = maxSigmaRatio_annealing(
-    30, 50, 1000, 1000, alterState=alterState
+    30, 60, 100, 100, alterState
 )
 print('maximum ratio:', r)
 

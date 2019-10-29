@@ -12,7 +12,7 @@ def maxSigmaRatio_annealing(
     m_total = n * (n - 1) // 2
     
     prob = lambda ci, cr, t: exp((ci - cr) / t)
-    temp = lambda i: temperature / log(i)
+    temp = lambda i: temperature * log(nsim) / log(i)
     
     curi = randomConnectedGraph(n, m)
     sri = sigmaRatio(curi)
@@ -28,7 +28,7 @@ def maxSigmaRatio_annealing(
             cur = (curi.copy(), sri)
             if sri > bes[1]:
                 bes = (curi.copy(), sri)
-
+                
         elif prob(sri, cur[1], t) > random():
             cur = (curi.copy(), sri)
 
