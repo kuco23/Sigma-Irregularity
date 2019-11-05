@@ -1,0 +1,96 @@
+\documentclass[ letterpaper, titlepage, fleqn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[slovene]{babel}
+\usepackage[margin=60px]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\title{$\sigma$-irregularity vs. total $\sigma$-irregularity}
+\author{Nejc Ševerkar \& Anja Trobec}
+\date{\today}
+\maketitle
+
+\section{Uvod}
+V projektni nalogi se bova ukvarjala z merjenjem iregularnosti enostavnih neusmerjenih grafov z
+dvema na videz podobnima metodama, {\em sigma irregularity} in total {\em sigma irregularity},
+definirani kot 
+$$
+\sigma(G) = \sum_{(u, v) \in E(G)}(d_u - d_v)^2 
+\quad \text{in} \quad
+\sigma_t(G) = \sum_{(u, v) \in V(G)}(d_u - d_v)^2
+$$
+Cilj naloge je maksimizacija razmerja, definiranega kot 
+$$\sigma_r(G) = \frac{\sigma_t(G)}{\sigma(G)}$$
+pri danem redu grafa $n \in \mathbb{N}$ in tako ugotoviti 
+stopnjo naraščanja $\sigma_r(G)$, v odvisnosti od reda.
+
+Ker nas grafi, za katere to razmerje ni definirano,
+torej v primeru $\sigma(G) = 0$, ne zanimajo, definiramo $\sigma_r(G) = 0$.
+To je natanko tedaj, kadar so vse komponenete grafa $G$ regularne.
+
+\section{Osnovna Teorija}
+
+\subsection{Maksimalna Stopnja Naraščanja}
+Najprej razčistimo kaj je zgornja meja naraščanja $\sigma_r$ v odvisnosti
+od reda grafa $G$. Ker velja
+$$
+\sigma_r(G) = \frac{\sigma_t(G)}{\sigma(G)} 
+\leq \sigma_t(G)
+= \sum_{(u, v) \in V(G)}(d_u - d_v)^2 
+< \sum_{(u, b) \in V(G)}n^2
+< n^2  n^2 = n^4
+$$
+Je red naraščanja $O(n^4)$.
+
+\subsection{Nepovezani Grafi}
+Ker sva opazila, da družina nepovezanih grafov doseže maksimalno stopnjo naraščanja,
+se lahko po konstrukciji družine takšnih grafov $G_n$ za $\forall n \in \mathbb{N}$
+osredotočimo samo na povezane grafe.
+\\\\
+Konstrukcije grafov $G_n$, za katere ima zaporedje $(\sigma_r(G_n))_n$ stopnjo 
+naraščanja $O(n^4)$ je sledeča.
+Vzamemo $n / 2$ vozlišč in iz njih konstruiramo poln graf, 
+medtem, ko v preostalih $n /2$ vozliščih povežemo 3 vozlišča z dvema povezavama.
+$$\sigma_r(G_{2n}) \geq \frac{n^2 \binom{n - 3}{2}}{2} = \frac{n^2 (n - 3)(n - 4)}{4} = \Theta(n^4)$$.
+\\
+S tem smo zaključili proučevanje nepovezanih grafov.
+
+\section{Implementacija}
+Problem bova reševala v Pythonu in si občasno pomagala s knjižnjico Networkx,
+končna implementacija pa bo zaradi hitrosti verjetno napisana v jeziku c++.
+
+\subsection{Metaheuristike}
+Za optimalno vrednost $\sigma_r$ na grafih reda $n$ morava testirati vse neizomorfne
+grafe tega reda, katerih je $\Omega(2^n)$. Če upoštevamo, da izračun $\sigma_r(G)$ 
+zahteva $\Omega(n^2)$ operacij dobimo skupno časovno zahtevnost $\Omega(n^2 2^n)$.
+Očitno je, zahtevnost predstavljala problem že za grafe reda $10$, 
+torej bova morala poiskati alternativen pristop v obliki metaheurističnih algoritmov. \\
+
+Ideja bo torej sistematično postopati po prostoru povezanih enostavnih grafov reda $n$ in 
+tako iskati aproksimacijo grafa $G$, ki maksimizira vrednost $\sigma_r$ na tem prostoru.
+
+Za učinkovito delovanje teh procesov, pa potrebujemo definirati ustrezno topologijo 
+na prostoru, torej podati pojem bližine, saj jo zahteva večina heurističnih algoritmov.
+
+To bova naredila v obliki zaporednega dodajanja ali odstranjevanja naključnih povezav v 
+danem grafu, pri čimer morava paziti, da ohranjava povezanost grafa, 
+torej z drugimi besedami, ne odstraniva mostov.\\
+Za te namene je napisana knjižnjica, ki podajo podporo za izbiro teh povezav
+in splošno generiranje naključnih povezanih grafov.
+
+
+\subsection{Simulated Annealing}
+Eden od algoritmov, ki naj bi rešil ta problem je {\em Simulated Annealing}, 
+katerega implementacija je končana, a brez okolice, ki bi vrnila dobre rezultate.
+Iz tega razloga sva poskusila implementacijo drugega algoritma
+
+\subsection{Variable Neighborhood Search}
+Trenutni algoritem, ki je v poteku implementacije je {\em Variable Neighborhood Search},
+ki definira dve družini okolic, tj. globalno in lokalno, katere uporablja za iskanje optimalnega grafa.
+
+\end{document}
