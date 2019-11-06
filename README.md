@@ -2,13 +2,8 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kuco23/sigma-irregularity/master)
 
 ## Problem
-The task is to maximize the ratio of two graph irregularity measures,  defined as 
-$$
-\sigma(G) = \sum_{(u, v) \in E(G)}(d_u - d_v)^2 
-\quad \text{\&} \quad 
-\sigma_T(G) = \sum_{(u, v) \in V(G)}(d_u - d_v)^2
-$$
-for graph $G_n$ of order $n$, thus discovering additional properties
+The task is to maximize the ratio of two graph irregularity measures,
+for graphs G_n of order n, thus discovering additional properties
 and connections between those extremal graphs.
 
 
