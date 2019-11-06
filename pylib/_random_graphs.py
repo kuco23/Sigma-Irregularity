@@ -12,7 +12,6 @@ def _randomCombinations(L):
 def randomConnectedEdges(n, m):
     edge_iter = _randomCombinations(range(n))
     parent = list(range(n))
-    graph = [[] for _ in range(n)]
     chaos_edges = m - (n - 1)
 
     def getSource(u):
