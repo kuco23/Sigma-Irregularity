@@ -52,7 +52,7 @@ def VNS(n, k_max):
         xr = sigmaRatio(G)
         while k < k_max:
             x = neighborhood(x, k)
-            y, yr = VLNS(x, xr)
+            y, yr = VNLS(x, xr)
             if yr >= xr:
                 x, xr = y, yr
                 k = 1
