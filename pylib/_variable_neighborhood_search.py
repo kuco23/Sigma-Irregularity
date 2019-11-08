@@ -64,8 +64,8 @@ def maxSigmaRatio_VNS(n, k_max):
         x = randomConnectedGraph(n, m)
         xr = sigmaRatio(x)
         while k < k_max:
-            x = VNLS(x, k)
-            y, yr = VLNS(x, xr)
+            x = neighborhood(x, k)
+            y, yr = VNLS(x, xr)
             if yr >= xr:
                 x, xr = y, yr
                 k = 1
