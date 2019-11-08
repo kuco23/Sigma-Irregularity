@@ -1,8 +1,12 @@
 from operator import eq
+from math import ceil, floor
 from itertools import combinations
-from random import randint
+from random import random, randint
+
 try: from numpy.random import shuffle
 except ModuleNotFoundError: from random import shuffle
+
+from ._edge_tools import addEdges, removeEdges
 
 def _randomCombinations(L):
     combs = list(combinations(L, 2))
@@ -56,4 +60,33 @@ def randomTree(n):
         graph[j].append(k)
         graph[k].append(j)
     return graph
-    
+
+def randomDistributedGraph(n, p):
+    edges = set()
+    G = randomTree(n)
+    for row in G: row.sort()
+
+    for u in range(n):
+        count = 0
+        for v in range(u):
+            if len(G[u]) > count and v == G[u][count]:
+                count += 1
+                continue
+            if random() < p:
+                edges.add((min(u,v), max(u,v)))
+
+    addEdges(G, edges)
+    return G
+
+def randomSigmaOptAprox(n, m):
+    p = 2 * m / (n * (n - 1))
+    nmin, nmax = floor(n / 2), ceil(n / 2)
+    G1 = randomDistributedGraph(nmin, p)
+    G2 = randomDistributedGraph(nmax, 1 - p)
+    for row in G2:
+        for i in range(len(row)):
+            row[i] += nmin
+    G1[0].append(nmin)
+    G2[0].append(0)
+    G1.extend(G2)
+    return G1

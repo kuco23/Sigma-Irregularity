@@ -1,36 +1,37 @@
 from math import log, exp
 from random import random, randint
+from copy import deepcopy
 
 from ._base_defs import sigmaRatio
 from ._random_graphs import (
-    randomConnectedGraph
+    randomConnectedGraph,
+    randomSigmaOptAprox
 )
 
 def maxSigmaRatio_annealing(
-    n, m, nsim, temperature, alterState
+    n, m, nsim, alterState
 ):
-    m_total = n * (n - 1) // 2
-    
     prob = lambda ci, cr, t: exp((ci - cr) / t)
-    temp = lambda i: temperature * log(nsim) / log(i)
+    temp = lambda i: 1 / log(i)
     
-    curi = randomConnectedGraph(n, m)
+    curi = randomSigmaOptAprox(n, m)
     sri = sigmaRatio(curi)
-    bes = (curi.copy(), sri)
-    cur = (curi.copy(), sri)
+    bes = (deepcopy(curi), sri)
+    cur = (deepcopy(curi), sri)
 
     for i in range(2, nsim + 2):
         t = temp(i)
-        alterState(curi)
+        alterState(curi, t)
         sri = sigmaRatio(curi)
+        #yield bes[0]
 
         if sri >= cur[1]:
-            cur = (curi.copy(), sri)
+            cur = (deepcopy(curi), sri)
             if sri > bes[1]:
-                bes = (curi.copy(), sri)
+                bes = (deepcopy(curi), sri)
                 
         elif prob(sri, cur[1], t) > random():
-            cur = (curi.copy(), sri)
+            cur = (deepcopy(curi), sri)
 
     return bes
     
