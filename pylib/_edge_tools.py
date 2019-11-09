@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 from collections import deque
 
 def removeEdges(G, edges):
@@ -20,8 +21,7 @@ def nonBridges(G, s, lim):
         u = queue.popleft()
         for v in G[u]:
             if marked[v] and parent[u] != v:
-                n1, n2 = min(v, u), max(v, u)
-                non_bridges.add((n1, n2))
+                non_bridges.add((min(u,v), max(u,v)))
                 if len(non_bridges) >= lim:
                     return non_bridges
             elif not marked[v]:
@@ -45,8 +45,7 @@ def nonEdges(G, s, lim):
                 marked[v] = True
         for w in range(len(G)):
             if not connected[w] and w != u:
-                n1, n2 = min(u, w), max(u, w)
-                added_edges.add((n1, n2))
+                added_edges.add((min(u,v), max(u,v)))
                 if len(added_edges) >= lim:
                     return added_edges
             else: connected[w] = False

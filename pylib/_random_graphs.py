@@ -61,11 +61,39 @@ def randomTree(n):
         graph[k].append(j)
     return graph
 
-def randomDistributedGraph(n, p):
+def randomSubtreeParentList(G):
+    n, edge_counter = len(G), 0
+    source = randint(0, n-1)
+    marked = [False] * n
+    parent = [None] * n
+    parent[source] = source
+    stack = [source]
+    while stack:
+        u = stack.pop()
+        marked[u] = True
+        for v in G[u]:
+            if parent[v] is None:
+                parent[v] = u
+                edge_counter += 1
+                if edge_counter == n - 1:
+                    return parent
+            if not marked[v]:
+                stack.append(v)
+    raise Exception('Subtree does not exist')
+
+def randomSubtree(G):
+    T = [[] for _ in range(len(G))]
+    pl = randomSubtreeParentList(G)
+    for u, p in enumerate(pl):
+        if u != p:
+            T[p].append(u)
+            T[u].append(p)
+    return T
+
+def randomDistributedConnectedGraph(n, p):
     edges = set()
     G = randomTree(n)
     for row in G: row.sort()
-
     for u in range(n):
         count = 0
         for v in range(u):
@@ -74,15 +102,14 @@ def randomDistributedGraph(n, p):
                 continue
             if random() < p:
                 edges.add((min(u,v), max(u,v)))
-
     addEdges(G, edges)
     return G
 
 def randomSigmaOptAprox(n, m):
     p = 2 * m / (n * (n - 1))
     nmin, nmax = floor(n / 2), ceil(n / 2)
-    G1 = randomDistributedGraph(nmin, p)
-    G2 = randomDistributedGraph(nmax, 1 - p)
+    G1 = randomDistributedConnectedGraph(nmin, p)
+    G2 = randomDistributedConnectedGraph(nmax, 1 - p)
     for row in G2:
         for i in range(len(row)):
             row[i] += nmin
