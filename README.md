@@ -1,4 +1,4 @@
-# σ-irregularity vs. total σ-irregularity
+# Sigma Irregularity
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kuco23/sigma-irregularity/master)
 
 ## Problem
