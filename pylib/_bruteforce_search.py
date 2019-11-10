@@ -4,8 +4,6 @@ import networkx as nx
 
 from ._networkx_extension import sigmaRatio_nx
 
-
-
 def maxSigmaRatio_bruteforce(n):
     m_total = n * (n - 1) // 2
     nodes = list(range(n))

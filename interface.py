@@ -21,11 +21,8 @@ from pylib import (
     simplePlot
 )
 
-order, nsim = 7, 400
-startedges = order * (order - 1) // 2
-
-ascende = []
-for i in range(10,100):
+s, t, nsim = 2, 200, 400
+for i in range(s, t+1):
     startedges = i * (i - 1) // 2
     g, r = maxSigmaRatio_annealing(
         i, startedges, nsim, 

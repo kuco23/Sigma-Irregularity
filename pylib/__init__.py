@@ -1,6 +1,8 @@
 """
 Support for the Simulated Annealing implementation.
 All graphs should be represented as neighbor lists.
+Conversions to networkx.Graph object should be
+done outside the library, so that it has no dependencies.
 """
 
 from ._base_defs import *

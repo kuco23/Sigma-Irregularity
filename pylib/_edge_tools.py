@@ -1,6 +1,8 @@
 from types import SimpleNamespace
 from collections import deque
 
+nedges = lambda G: sum(map(len, G)) // 2
+
 def removeEdges(G, edges):
     for u, v in edges:
         G[u].remove(v)

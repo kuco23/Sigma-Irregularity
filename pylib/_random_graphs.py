@@ -13,7 +13,7 @@ def _randomCombinations(L):
     shuffle(combs)
     yield from combs
 
-def randomConnectedEdges(n, m):
+def randomConnectedEdges(n, m): # O(n^2)
     edge_iter = _randomCombinations(range(n))
     parent = list(range(n))
     chaos_edges = m - (n - 1)
@@ -50,7 +50,7 @@ def randomConnectedGraph(n, m):
         graph[n2].append(n1)
     return graph
 
-def randomTree(n):
+def randomTree(n): # O(n)
     nodes = list(range(n))
     graph = [[] for _ in nodes]
     shuffle(nodes)
@@ -61,7 +61,7 @@ def randomTree(n):
         graph[k].append(j)
     return graph
 
-def randomSubtreeParentList(G):
+def randomSubtreeParentList(G): # O(n + m)
     n, edge_counter = len(G), 0
     source = randint(0, n-1)
     marked = [False] * n
