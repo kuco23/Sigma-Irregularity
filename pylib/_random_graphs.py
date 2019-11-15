@@ -3,18 +3,13 @@ from math import ceil, floor
 from itertools import combinations
 from random import random, randint
 
-try: from numpy.random import shuffle
-except ModuleNotFoundError: from random import shuffle
+from numpy.random import shuffle
 
+from ._random_extension import randomCombinations
 from ._edge_tools import addEdges, removeEdges
 
-def _randomCombinations(L):
-    combs = list(combinations(L, 2))
-    shuffle(combs)
-    yield from combs
-
 def randomConnectedEdges(n, m): # O(n^2)
-    edge_iter = _randomCombinations(range(n))
+    edge_iter = randomCombinations(range(n))
     parent = list(range(n))
     chaos_edges = m - (n - 1)
 

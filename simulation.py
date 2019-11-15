@@ -9,24 +9,26 @@ from pylib import (
     randomConnectedEdges,
     randomConnectedGraph,
     randomSigmaOptAprox,
-    maxSigmaRatio_annealing,
+    maxSigmaRatio_annealing_modified,
 
     removeEdges,
     addEdges,
+    localNeighbor,
     globalNeighbor,
-    annealingNeighbor,
 
     neighborListToNx,
     nxToNeighborList,
     simplePlot
 )
 
-s, t, nsim = 2, 200, 400
+ascende = []
+s, t, nsim = 3, 200, 100
 for i in range(s, t+1):
     startedges = i * (i - 1) // 2
-    g, r = maxSigmaRatio_annealing(
+    g, r = maxSigmaRatio_annealing_modified(
         i, startedges, nsim, 
-        annealingNeighbor
+        localNeighbor,
+        globalNeighbor
     )
     ascende.append((i, r))
     print(i, r)
