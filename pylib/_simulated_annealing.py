@@ -9,20 +9,21 @@ from ._random_graphs import (
 )
 
 def maxSigmaRatio_annealing_modified(
-    n, m, nsim, alterLocal, alterGlobal
+    n, m, nsim, alterLocal, alterGlobal,
+    defaultG=None
 ):
     prob = lambda ci, cr, t: exp((ci - cr) / t)
     temp = lambda i: 1 / log(i)
     
-    curi = randomSigmaOptAprox(n, m)
+    curi = defaultG or randomSigmaOptAprox(n, m)
     sri = sigmaRatio(curi)
     bes = (deepcopy(curi), sri)
     cur = (deepcopy(curi), sri)
-
+    
     stucknum = 0
     for i in range(2, nsim + 2):
         t = temp(i)
-        sri = alterLocal(curi, 4)
+        sri = alterLocal(curi, 5)
 
         if sri >= cur[1]:
             cur = (deepcopy(curi), sri)
@@ -34,7 +35,7 @@ def maxSigmaRatio_annealing_modified(
             
         else:
             stucknum += 1
-            if stucknum > nsim // 4:
+            if stucknum > 4:
                 alterGlobal(curi, t)
                 stucknum = 0
 

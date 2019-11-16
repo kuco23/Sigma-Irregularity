@@ -30,7 +30,7 @@ def nonBridges(G, s, lim):
     data = SimpleNamespace(
         sentinel=False,
         edges=set(),
-        parent = [False] * len(G)
+        parent = [None] * len(G)
     )
     
     def fun(u, v, marked):
@@ -44,13 +44,12 @@ def nonBridges(G, s, lim):
     bfs(G, s, fun, data)
     return data.edges
 
-def nonEdges(G, s, lim):
-    added_edges = set()
+def nonEdgesCoro(G, s):
     connected = [False] * len(G)
     marked = [False] * len(G)
     marked[s] = True
     queue = deque([s])
-    while queue and len(added_edges) < lim:
+    while queue:
         u = queue.popleft()
         for v in G[u]:
             connected[v] = True
@@ -59,28 +58,9 @@ def nonEdges(G, s, lim):
                 marked[v] = True
         for w in range(len(G)):
             if not connected[w] and w != u:
-                added_edges.add((min(u,v), max(u,v)))
-                if len(added_edges) >= lim:
-                    return added_edges
+                yield (min(u,w), max(u,w))
             else: connected[w] = False
-    return added_edges
 
-def nearDegree(G, s, eps, lim):
-    data = SimpleNamespace(
-        sentinel = False,
-        parent = [None] * len(G),
-        edges = set()
-    )
-    def fun(u, v, marked):
-        if (
-            marked[v] and data.parent[u] != v and
-            abs(len(G[u]) - len(G[v])) < eps
-        ):
-            data.edges.add((min(u,v), max(u,v)))
-            if len(data.edges) >= lim:
-                data.sentinel = True
-        elif not marked[v]:
-            data.parent[v] = u
-
-    bfs(G, s)
-    return data.edges
+def nonEdges(G, s, lim):
+    coro = nonEdgesCoro(G, s)
+    return set([e for _, e in zip(range(lim), coro)])

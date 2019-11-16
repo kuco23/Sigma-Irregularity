@@ -6,18 +6,18 @@ import matplotlib.pyplot as plt
 from pylib import (
     sigma, sigma_t, sigmaRatio,
     nonEdges, nonBridges,
+    
     randomConnectedEdges,
     randomConnectedGraph,
+    randomTree,
     randomSigmaOptAprox,
+    
     maxSigmaRatio_annealing_modified,
 
-    removeEdges,
-    addEdges,
-    localNeighbor,
-    globalNeighbor,
-
-    neighborListToNx,
-    nxToNeighborList,
+    removeEdges, addEdges,
+    localNeighbor, globalNeighbor,
+    
+    neighborListToNx, nxToNeighborList,
     simplePlot
 )
 
@@ -26,10 +26,11 @@ s, t, nsim = 3, 200, 100
 for i in range(s, t+1):
     startedges = i * (i - 1) // 2
     g, r = maxSigmaRatio_annealing_modified(
-        i, startedges, nsim, 
+        i, startedges, nsim,
         localNeighbor,
         globalNeighbor
     )
+    # simplePlot(neighborListToNx(g))
     ascende.append((i, r))
     print(i, r)
 

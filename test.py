@@ -1,8 +1,9 @@
 from pylib import (
     randomConnectedGraph,
+    randomPath,
     
-    removeEdges,
-    nonBridges,
+    removeEdges, addEdges,
+    nonBridges, nearDegree,
     
     localNeighbor,
     globalNeighbor,
@@ -15,9 +16,15 @@ from pylib import (
 
 
 g, r = maxSigmaRatio_annealing_modified(
-    10, 10, 1000, localNeighbor, globalNeighbor
+    9, 30, 100, localNeighbor, globalNeighbor
 )
 
-print(r)
-nG = neighborListToNx(g)
-simplePlot(nG)
+
+G = randomPath(10)
+i = 0
+while True:
+    i = (i + 1) % 10
+    edges = nearDegree(G, i, 2)
+    addEdges(G, edges)
+    simplePlot(neighborListToNx(G))
+    

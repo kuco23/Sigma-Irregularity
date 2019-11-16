@@ -2,9 +2,7 @@ from operator import add
 
 import networkx as nx
 
-from pylib import *
-
-files = map(lambda x: f'graph{x}c.g6', range(5,10))
+files = map(lambda x: f'graph{x}c.g6', range(9,10))
 
 pairs = []
 for file in files:

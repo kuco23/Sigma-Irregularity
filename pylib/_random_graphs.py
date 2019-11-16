@@ -56,6 +56,16 @@ def randomTree(n): # O(n)
         graph[k].append(j)
     return graph
 
+def randomPath(n): # O(n)
+    nodes = list(range(n))
+    graph = [[] for _ in nodes]
+    shuffle(nodes)
+    for i in range(n - 1):
+        u, v = nodes[i], nodes[i+1]
+        graph[u].append(v)
+        graph[v].append(u)
+    return graph
+
 def randomSubtreeParentList(G): # O(n + m)
     n, edge_counter = len(G), 0
     source = randint(0, n-1)
