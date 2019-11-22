@@ -1,3 +1,5 @@
+from itertools import combinations
+
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.animation

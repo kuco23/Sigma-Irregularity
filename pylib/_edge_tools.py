@@ -13,32 +13,43 @@ def addEdges(G, edges):
         G[u].append(v)
         G[v].append(u)
 
-def nonBridges(G, s, lim):
-    non_bridges = set()
-    parent = [None] * len(G)
+def bfs(G, s, fun, data):
     marked = [False] * len(G)
     marked[s] = True
     queue = deque([s])
     while queue:
         u = queue.popleft()
         for v in G[u]:
-            if marked[v] and parent[u] != v:
-                non_bridges.add((min(u,v), max(u,v)))
-                if len(non_bridges) >= lim:
-                    return non_bridges
-            elif not marked[v]:
+            fun(u, v, marked)
+            if data.sentinel: return
+            if not marked[v]:
                 marked[v] = True
-                parent[v] = u
                 queue.append(v)
-    return non_bridges
 
-def nonEdges(G, s, lim):
-    added_edges = set()
+def nonBridges(G, s, lim):
+    data = SimpleNamespace(
+        sentinel=False,
+        edges=set(),
+        parent = [None] * len(G)
+    )
+    
+    def fun(u, v, marked):
+        if marked[v] and data.parent[u] != v:
+            data.edges.add((min(u,v), max(u,v)))
+            if len(data.edges) >= lim:
+                data.sentinel = True
+        elif not marked[v]:
+            data.parent[v] = u
+
+    bfs(G, s, fun, data)
+    return data.edges
+
+def nonEdgesCoro(G, s):
     connected = [False] * len(G)
     marked = [False] * len(G)
     marked[s] = True
     queue = deque([s])
-    while queue and len(added_edges) < lim:
+    while queue:
         u = queue.popleft()
         for v in G[u]:
             connected[v] = True
@@ -47,8 +58,9 @@ def nonEdges(G, s, lim):
                 marked[v] = True
         for w in range(len(G)):
             if not connected[w] and w != u:
-                added_edges.add((min(u,v), max(u,v)))
-                if len(added_edges) >= lim:
-                    return added_edges
+                yield (min(u,w), max(u,w))
             else: connected[w] = False
-    return added_edges
+
+def nonEdges(G, s, lim):
+    coro = nonEdgesCoro(G, s)
+    return set([e for _, e in zip(range(lim), coro)])

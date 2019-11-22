@@ -18,3 +18,4 @@ def sigma_t(G):
 def sigmaRatio(G):
     sG, stG = sigma(G), sigma_t(G)
     return stG / sG if sG > 0 else 0
+
