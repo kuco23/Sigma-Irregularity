@@ -21,7 +21,7 @@ from pylib import (
     simplePlot
 )
 
-s, t, nsim = 2, 200, 400
+s, t, nsim = 2, 50, 400
 for i in range(s, t+1):
     startedges = i * (i - 1) // 2
     g, r = maxSigmaRatio_annealing(

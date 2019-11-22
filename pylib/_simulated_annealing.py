@@ -23,7 +23,7 @@ def maxSigmaRatio_annealing(
         t = temp(i)
         alterState(curi, t)
         sri = sigmaRatio(curi)
-        #yield bes[0]
+        yield bes[0]
 
         if sri >= cur[1]:
             cur = (deepcopy(curi), sri)
