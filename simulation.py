@@ -23,7 +23,7 @@ from pylib import (
 )
 
 ascende = []
-s, t, nsim = 7, 200, 200
+s, t, nsim = 3, 200, 100
 for i in range(s, t+1):
     startedges = i * (i - 1) // 2
     g, r = maxSigmaRatio_annealing_modified(

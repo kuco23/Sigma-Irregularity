@@ -61,10 +61,11 @@ $$\sigma_r(G_{2n}) > \frac{(n - 3)n \binom{n}{2}}{2} = \frac{(n - 3)n n(n - 1)}{
 \\
 S tem smo zaključili proučevanje nepovezanih grafov.
 
-\section{Implementacija}
+\section{Ideja implementacije}
 Problem bova reševala v Pythonu in si občasno pomagala s knjižnjico Networkx,
 končna implementacija pa bo zaradi hitrosti verjetno napisana v jeziku c++.
 
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Metaheuristike}
 Za optimalno vrednost $\sigma_r$ na grafih reda $n$ morava testirati vse neizomorfne
 grafe tega reda, katerih je $\Omega(2^n)$. Če upoštevamo, da izračun $\sigma_r(G)$ 
@@ -84,14 +85,88 @@ torej z drugimi besedami ne odstraniva mostov.\\
 Za te namene je napisana knjižnjica, ki podajo podporo za izbiro teh povezav
 in splošno generiranje naključnih povezanih grafov.
 
-
 \subsection{Simulated Annealing}
 Eden od algoritmov, ki naj bi rešil ta problem je {\em Simulated Annealing}, 
 katerega implementacija je končana, a brez okolice, ki bi vrnila dobre rezultate.
 Iz tega razloga sva poskusila implementacijo drugega algoritma
 
-\subsection{Variable Neighborhood Search}
-Trenutni algoritem, ki je v poteku implementacije je {\em Variable Neighborhood Search},
-ki definira dve družini okolic, tj. globalno in lokalno, katere uporablja za iskanje optimalnega grafa.
+\section{Naloga}
 
-\end{document}
+\subsection{Majhni grafi}
+Za majhne grafe sva na strani ** našla že generirane povezane neizomorfne grafe do stopnje 9.
+Na njih sva poiskala maksimalne $\sigma_r(G)$, ki so zapisane v naslednji tabeli.
+\begin{center}
+    \begin{tabular}{ l  c  r }
+      \hline
+      $n$ & $\sigma_r(G)$ \\ \hline
+      2 & 0 \\ \hline
+      3 & -1 \\ \hline
+      4 & 8 \\ \hline
+      5 & 8 \\ \hline
+      6 & 8 \\ \hline
+      7 & 8 \\ \hline
+      8 & 8 \\ \hline
+      9 & 8 \\ \hline
+      \hline
+    \end{tabular}
+  \end{center}
+
+\subsection{Implementacija Simulated Annealing algoritma}
+
+Algoritem sva implementirala kot prikazuje sledeča psevdokoda.
+
+%\begin{small}
+%    \begin{algorithmic}
+%%    \Function{Simmulated_Annealing}{$n, nsim, alterLocal, alterGlobal$}
+%    **insert ideja**
+%    \EndFunction
+%    
+%    \end{algorithmic}
+%    
+%%    \end{small}
+%\end{document}
+
+Algoritem sprejme 3 argumente, ki so {\em $n$} število vozlišč in dve definiciji
+okolic grafa {\em alterLocal}, {\em alterglobal}. 
+Prva okolica definira majhne spremembe v grafu, druga pa definira nov graf,
+ki ga algoritem konstruira, če predolgo ne naredi ustreznih sprememb.
+Algoritem služi kot splošen model za iskanje maksimalnih vrednosti
+$\sigma_r(G)$, specificiran z argumentoma, ki definirata ustrezne okolice.
+
+Poglejmo si idejo implementacije okolic.
+**insert psevdokoda** 
+
+Lokalna okolica grafa je definirana s testiranjem parov števil naključno
+odstranjenih in dodanih povezav. Iz tega vzorčenja izberemo optimalno 
+spremembo.
+Globalna okolica grafa pa sestavi nov graf kot zlepek polnega grafa in poti, 
+saj se je takšna oblika izkazala za optimalno po testiranju grafov na
+bolj splošni globalni okolici.
+
+Po dobljenem optimumu se lotimo še popravljanja, ki nastopi v obliki
+minimizacije $\sigma(G)$ tako da se osredotočimo na povezave, kjer
+je razlika med $d_G(v)$ in $d_G(u)$ za neka $uv \in E(G)$ največja.
+
+\subsection{Hipoteza}
+
+Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav
+vedno na absolutni razliki $1$.
+
+Vsakemu grafu bova dodelila stopnjo neresničnosti izjave.
+Ta stopnja bo definirana kot ...
+
+\subsection{Distribucija stopenj vozlišč}
+Narisala bova graf na katerem bosta za graf $G$ velikosti $n$ izpisani
+vrednosti $\sigma_r(G)$ in $\max_{v \in V(G)}d_G(v)$ na katerem
+se bo lepo videla korelacija.
+
+Preveriti morava še, da je stopnja narašanja zaporedja
+$(\sigma_r(G_n))_n$, kjer $G_n$ graf stopnje $n \in \mathbb{N}$
+$O(n^2)$ in poiskati ustrezno konstanto $c \in mathbb{R}$, ki 
+se naraščanju najbolj prilega.
+
+To bova naredila tako, da bova za neko diskretizacijo intervalov
+poiskala najboljše prileganje grafa funkcije $cn^p$ za 
+$p \in [1, 4]$, $c$ pa bova dobila z metoda najmanjših kvadratov.
+Tako bova ocenila naraščanje zaporedja in hkrati poiskala ustrezno
+konstanto, ki pripada temu naraščanju.

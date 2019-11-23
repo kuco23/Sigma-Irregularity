@@ -65,4 +65,9 @@ def nonEdgesCoro(G, s):
 
 def nonEdges(G, s, lim):
     coro = nonEdgesCoro(G, s)
-    return set([e for _, e in zip(range(lim), coro)])
+    edges = set()
+    for e in coro:
+        edges.add(e)
+        if len(edges) >= lim:
+            break
+    return edges

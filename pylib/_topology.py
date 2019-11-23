@@ -44,7 +44,7 @@ def _testSwitch(G, source, r, a):
     removeEdges(G, added)
     return sigma, removed, added
 
-def localBasicNeighbor(G, diff):
+def localNeighbor(G, diff):
     n, lim = len(G), ceil(diff) + 1
     source = choice(_nodeWithLargestSigma(G))
     perms = randomPermutations(

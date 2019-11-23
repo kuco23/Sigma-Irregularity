@@ -2,9 +2,13 @@
 __pycache__
 *.exe
 *.gz
-*.tex
+*.aux
+*.fls
+*.log
+*.fdb_latexmk
 *.pdf
 *.g6
+*.png
 .ipynb_checkpoints
 .vscode
 env

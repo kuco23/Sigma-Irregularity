@@ -3,12 +3,12 @@ from pylib import (
     randomPath,
     
     removeEdges, addEdges,
-    nonBridges, nearDegree,
     
     localNeighbor,
     globalNeighbor,
 
     maxSigmaRatio_annealing_modified,
+    maxSigmaRatio_bruteforce,
 
     simplePlot,
     neighborListToNx,
@@ -19,7 +19,7 @@ g, r = maxSigmaRatio_annealing_modified(
     9, 30, 100, localNeighbor, globalNeighbor
 )
 
-
+'''
 G = randomPath(10)
 i = 0
 while True:
@@ -27,4 +27,8 @@ while True:
     edges = nearDegree(G, i, 2)
     addEdges(G, edges)
     simplePlot(neighborListToNx(G))
-    
+'''
+
+G, r = maxSigmaRatio_annealing_modified(40, 100, 2000, localNeighbor, globalNeighbor)
+G_nx = neighborListToNx(G)
+simplePlot(G_nx)
