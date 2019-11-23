@@ -15,22 +15,26 @@ from pylib import (
     maxSigmaRatio_annealing_modified,
 
     removeEdges, addEdges,
-    localNeighbor, globalNeighbor,
+    localBasicNeighbor, globalBasicNeighbor,
+    globalTwoPartNeighbor,
     
     neighborListToNx, nxToNeighborList,
     simplePlot
 )
 
 ascende = []
-s, t, nsim = 3, 200, 100
+s, t, nsim = 7, 200, 200
 for i in range(s, t+1):
     startedges = i * (i - 1) // 2
     g, r = maxSigmaRatio_annealing_modified(
         i, startedges, nsim,
-        localNeighbor,
-        globalNeighbor
+        localBasicNeighbor,
+        globalTwoPartNeighbor
     )
-    # simplePlot(neighborListToNx(g))
+    simplePlot(
+        neighborListToNx(g),
+        f'_opts/img{i}_{round(r)}.png'
+    )
     ascende.append((i, r))
     print(i, r)
 

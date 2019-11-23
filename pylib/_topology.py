@@ -3,7 +3,11 @@ from random import randint, random, choice
 
 from ._base_defs import sigmaRatio
 from ._random_extension import randomPermutations
-from ._random_graphs import randomSigmaOptAprox, randomPath
+from ._random_graphs import (
+    randomSigmaOptAprox,
+    randomPath,
+    randomConnectedGraph
+)
 from ._edge_tools import (
     removeEdges, addEdges,
     nonBridges, nonEdges
@@ -13,9 +17,11 @@ def _nodeWithLargestSigma(G):
     smax, nmax = -1, -1
     for u, line in enumerate(G):
         for v in line:
-            aprox = abs(len(G[u]) - len(G[v]))
+            du, dv = map(len, (G[u], G[v]))
+            aprox = abs(du - dv)
             if aprox > smax:
-                smax, nmax = aprox, (u, v)
+                smax = aprox
+                nmax = u, v
     return nmax
 
 def _testSwitch(G, source, r, a):
@@ -38,8 +44,8 @@ def _testSwitch(G, source, r, a):
     removeEdges(G, added)
     return sigma, removed, added
 
-def localNeighbor(G, diff):
-    n, lim = len(G), ceil(temp) + 1
+def localBasicNeighbor(G, diff):
+    n, lim = len(G), ceil(diff) + 1
     source = choice(_nodeWithLargestSigma(G))
     perms = randomPermutations(
         range(lim), reversed(range(lim))
@@ -57,11 +63,19 @@ def localNeighbor(G, diff):
     removeEdges(G, rem_opt)
     return sigma_opt
 
+def globalBasicNeighbor(G, temp):
+    n, m = len(G), sum(map(len,G)) // 2
+    m_max = n * (n - 1) // 2
+    G[:] = randomConnectedGraph(
+        n, randint(
+            max(m-3, n-1),
+            min(m+3, m_max)
+    ))
+    return sigmaRatio(G)
 
-def globalNeighbor(G, temp):
+
+def globalTwoPartNeighbor(G, temp):
     n, m = len(G), sum(map(len, G))
-    diff = ceil(5 * temp)
-    m += randint(-diff, diff)
-    G[:] = randomSigmaOptAprox(n, m)
+    G[:] = randomSigmaOptAprox(n, 0.1)
     return sigmaRatio(G)
 

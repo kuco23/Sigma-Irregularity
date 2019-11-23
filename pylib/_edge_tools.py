@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 from collections import deque
+from random import sample
 
 nedges = lambda G: sum(map(len, G)) // 2
 
@@ -45,8 +46,9 @@ def nonBridges(G, s, lim):
     return data.edges
 
 def nonEdgesCoro(G, s):
-    connected = [False] * len(G)
-    marked = [False] * len(G)
+    n = len(G)
+    connected = [False] * n
+    marked = [False] * n
     marked[s] = True
     queue = deque([s])
     while queue:
@@ -56,7 +58,7 @@ def nonEdgesCoro(G, s):
             if not marked[v]:
                 queue.append(v)
                 marked[v] = True
-        for w in range(len(G)):
+        for w in sample(range(n), n):
             if not connected[w] and w != u:
                 yield (min(u,w), max(u,w))
             else: connected[w] = False
