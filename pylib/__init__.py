@@ -12,3 +12,4 @@ from ._topology import *
 from ._bruteforce_search import *
 from ._simulated_annealing import *
 from ._networkx_extension import *
+from ._largest_squares import *

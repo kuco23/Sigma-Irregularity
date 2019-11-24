@@ -1,7 +1,7 @@
 from math import ceil
 from random import randint, random, choice
 
-from ._base_defs import sigmaRatio
+from ._base_defs import sigmaRatio, sigmaArgmax
 from ._random_extension import randomPermutations
 from ._random_graphs import (
     randomSigmaOptAprox,
@@ -12,17 +12,6 @@ from ._edge_tools import (
     removeEdges, addEdges,
     nonBridges, nonEdges
 )
-
-def _nodeWithLargestSigma(G):
-    smax, nmax = -1, -1
-    for u, line in enumerate(G):
-        for v in line:
-            du, dv = map(len, (G[u], G[v]))
-            aprox = abs(du - dv)
-            if aprox > smax:
-                smax = aprox
-                nmax = u, v
-    return nmax
 
 def _testSwitch(G, source, r, a):
     n, m = len(G), sum(map(len, G))
@@ -44,13 +33,12 @@ def _testSwitch(G, source, r, a):
     removeEdges(G, added)
     return sigma, removed, added
 
-def localNeighbor(G, diff):
-    n, lim = len(G), ceil(diff) + 1
-    source = choice(_nodeWithLargestSigma(G))
+def localBasicNeighbor(G, diff):
+    lim = ceil(diff * len(G) / 10)
+    source = choice(sigmaArgmax(G)[1])
     perms = randomPermutations(
         range(lim), reversed(range(lim))
     )
-
     sigma_opt, rem_opt, add_opt = 0, [], []
     for _, (r, a) in zip(range(lim), perms):
         if not (r or a): continue
@@ -78,4 +66,3 @@ def globalTwoPartNeighbor(G, temp):
     n, m = len(G), sum(map(len, G))
     G[:] = randomSigmaOptAprox(n, 0.1)
     return sigmaRatio(G)
-

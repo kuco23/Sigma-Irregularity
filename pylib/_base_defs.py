@@ -19,3 +19,14 @@ def sigmaRatio(G):
     sG, stG = sigma(G), sigma_t(G)
     return stG / sG if sG > 0 else 0
 
+
+def sigmaArgmax(G):
+    smax, nmax = -1, -1
+    for u, line in enumerate(G):
+        for v in line:
+            du, dv = map(len, (G[u], G[v]))
+            aprox = abs(du - dv)
+            if aprox > smax:
+                smax = aprox
+                nmax = u, v
+    return smax, nmax
