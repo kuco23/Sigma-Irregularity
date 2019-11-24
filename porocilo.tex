@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumerate}
+\usepackage[]{algorithm2e}
 \setlength\parindent{0pt}
 
 \begin{document}
@@ -36,8 +37,9 @@ To je natanko tedaj, kadar so vse komponenete grafa $G$ regularne.
 \section{Osnovna Teorija}
 
 \subsection{Maksimalna Stopnja Naraščanja}
-Najprej razčistimo, kaj je zgornja meja naraščanja $\sigma_r$ v odvisnosti
-od reda grafa $G$. Ker velja
+Ker bomo za analizo in primerjavo potrebovali zgornjo mejo stopnje naraščanja
+zaporedja $(\sigma_r(G_n))_n$ v odvisnosti od reda $n$ si poglejmo 
+naslednji račun.
 $$
 \sigma_r(G) = \frac{\sigma_t(G)}{\sigma(G)} 
 \leq \sigma_t(G)
@@ -45,7 +47,7 @@ $$
 < \sum_{(u, v) \in V(G)}n^2
 < n^2  n^2 = n^4,
 $$
-je red naraščanja $O(n^4)$.
+Sledi, da je red naraščanja $O(n^4)$.
 
 \subsection{Nepovezani Grafi}
 Ker sva opazila, da družina nepovezanih grafov doseže maksimalno stopnjo naraščanja,
@@ -56,21 +58,20 @@ Konstrukcije grafov $G_n$, za katere ima zaporedje $(\sigma_r(G_n))_n$ stopnjo
 naraščanja $O(n^4)$ je sledeča.
 Vzamemo $n / 2$ vozlišč in iz njih konstruiramo poln graf
 medtem, ko v preostalih $n /2$ vozliščih povežemo 3 vozlišča z dvema povezavama.
-Po kratkem premisleku lahko konstruiramo naslednjo neenakost.
+Po kratkem premisleku lahko formuliramo naslednjo neenakost.
 $$\sigma_r(G_{2n}) > \frac{(n - 3)n \binom{n}{2}}{2} = \frac{(n - 3)n n(n - 1)}{4} = \Theta(n^4)$$.
 \\
 S tem smo zaključili proučevanje nepovezanih grafov.
 
-\section{Ideja implementacije}
+\section{Ideja Iskanja Optimalnih Grafov}
 Problem bova reševala v Pythonu in si občasno pomagala s knjižnjico Networkx,
 končna implementacija pa bo zaradi hitrosti verjetno napisana v jeziku c++.
 
-%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Metaheuristike}
 Za optimalno vrednost $\sigma_r$ na grafih reda $n$ morava testirati vse neizomorfne
 grafe tega reda, katerih je $\Omega(2^n)$. Če upoštevamo, da izračun $\sigma_r(G)$ 
 zahteva $\Omega(n^2)$ operacij, dobimo skupno časovno zahtevnost $\Omega(n^2 2^n)$.
-Očitno je zahtevnost predstavljala problem že za grafe reda $10$, 
+Očitno ta zahtevnost predstavlja problem že za grafe reda $10$, 
 torej bova morala poiskati alternativen pristop v obliki metaheurističnih algoritmov. \\
 
 Ideja bo torej sistematično postopati po prostoru povezanih enostavnih grafov reda $n$ in 
@@ -95,50 +96,38 @@ Iz tega razloga sva poskusila implementacijo drugega algoritma
 \subsection{Majhni grafi}
 Za majhne grafe sva na strani ** našla že generirane povezane neizomorfne grafe do stopnje 9.
 Na njih sva poiskala maksimalne $\sigma_r(G)$, ki so zapisane v naslednji tabeli.
+
 \begin{center}
-    \begin{tabular}{ l  c  r }
+    \begin{tabular}{|  l | c | }
       \hline
       $n$ & $\sigma_r(G)$ \\ \hline
-      2 & 0 \\ \hline
-      3 & -1 \\ \hline
-      4 & 8 \\ \hline
-      5 & 8 \\ \hline
-      6 & 8 \\ \hline
-      7 & 8 \\ \hline
-      8 & 8 \\ \hline
-      9 & 8 \\ \hline
+      2 & 0 \\ 
+      3 & 1 \\ 
+      4 & -1 \\ 
+      5 & 3 \\ 
+      6 & 5 \\ 
+      7 & 13 \\ 
+      8 & 19 \\ 
+      9 & 14.5 \\ 
       \hline
     \end{tabular}
   \end{center}
 
-\subsection{Implementacija Simulated Annealing algoritma}
+Grafov na večih vozliščih je preveč za analizo vsakega posebej, torej
+se lotimo implementacije {\em Simulated Annealing} algoritma.
 
-Algoritem sva implementirala kot prikazuje sledeča psevdokoda.
+\subsection{Večji grafi}
 
-%\begin{small}
-%    \begin{algorithmic}
-%%    \Function{Simmulated_Annealing}{$n, nsim, alterLocal, alterGlobal$}
-%    **insert ideja**
-%    \EndFunction
-%    
-%    \end{algorithmic}
-%    
-%%    \end{small}
-%\end{document}
-
-Algoritem sprejme 3 argumente, ki so {\em $n$} število vozlišč in dve definiciji
-okolic grafa {\em alterLocal}, {\em alterglobal}. 
-Prva okolica definira majhne spremembe v grafu, druga pa definira nov graf,
-ki ga algoritem konstruira, če predolgo ne naredi ustreznih sprememb.
-Algoritem služi kot splošen model za iskanje maksimalnih vrednosti
-$\sigma_r(G)$, specificiran z argumentoma, ki definirata ustrezne okolice.
-
-Poglejmo si idejo implementacije okolic.
-**insert psevdokoda** 
+Med večjimi grafi bomo optimume iskali s pomočjo algoritma
+{\em Simulated Annealing}. Ta sprejme 2 argumenta,
+{\em $n$} število vozlišč in definicijo
+okolice grafa {\em alterLocal}.
+Okolice so lahko poljubne in se delijo na lokalnein globalne.
 
 Lokalna okolica grafa je definirana s testiranjem parov števil naključno
 odstranjenih in dodanih povezav. Iz tega vzorčenja izberemo optimalno 
 spremembo.
+
 Globalna okolica grafa pa sestavi nov graf kot zlepek polnega grafa in poti, 
 saj se je takšna oblika izkazala za optimalno po testiranju grafov na
 bolj splošni globalni okolici.
@@ -152,8 +141,8 @@ je razlika med $d_G(v)$ in $d_G(u)$ za neka $uv \in E(G)$ največja.
 Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav
 vedno na absolutni razliki $1$.
 
-Vsakemu grafu bova dodelila stopnjo neresničnosti izjave.
-Ta stopnja bo definirana kot ...
+To bova preverila tako, da bova izračunala število vozlišč za katera
+to ne velja pri vsakem optimalnem grafu in ta prikazala z grafom.
 
 \subsection{Distribucija stopenj vozlišč}
 Narisala bova graf na katerem bosta za graf $G$ velikosti $n$ izpisani
@@ -161,12 +150,25 @@ vrednosti $\sigma_r(G)$ in $\max_{v \in V(G)}d_G(v)$ na katerem
 se bo lepo videla korelacija.
 
 Preveriti morava še, da je stopnja narašanja zaporedja
-$(\sigma_r(G_n))_n$, kjer $G_n$ graf stopnje $n \in \mathbb{N}$
-$O(n^2)$ in poiskati ustrezno konstanto $c \in mathbb{R}$, ki 
+$(\sigma_r(G_n))_n$, kjer $G_n$ graf stopnje $n \in \mathbb{N}$,
+$O(n^2)$ in poiskati ustrezno konstanto $c \in \mathbb{R}$, ki 
 se naraščanju najbolj prilega.
+\\\\
+Predpostavimo, da smo optimum izračunali za $n$ grafov in
+označimo $X(n, p) = (1^p, 2^p, \dots, n^p)^T \in \mathbb{R}^{nx1}$ 
+in $a = (a_1, a_2, \dots, a_n)^T$ vektor, kjer $a_i$ predstavlja
+dobljeni optimalni $\sigma_r(G_i)$ za graf $G_i$ na $i$ vozliščih.
+Problem pri danem $p \in \mathbb{R}^{+}$ zahteva rešitev linearnega sistema 
+$$cX(n, p) = a$$.
+Ta sistem seveda ne bo rešljiv, iskanja aproksimacije pa se bomo
+lotili z metodo najmanjših kvadratov, torej minimum $2$-norme
+razlike obeh strani bo dosežen pri
+$$c = ||X(n, p)||_{2}^2 / <a, X(n, p)>$$.
 
-To bova naredila tako, da bova za neko diskretizacijo intervalov
-poiskala najboljše prileganje grafa funkcije $cn^p$ za 
-$p \in [1, 4]$, $c$ pa bova dobila z metoda najmanjših kvadratov.
-Tako bova ocenila naraščanje zaporedja in hkrati poiskala ustrezno
-konstanto, ki pripada temu naraščanju.
+Najboljšo aproksimacijo naraščanja $\sigma_r$ bomo poiskali 
+z diskretizacijo $D \subset [0, 4]$ in za $\forall p \in D$ 
+izračunali prej definirani $c$, na koncu pa izbrali tisto kombinacijo
+$(c, p)$, za katero je $||cX(n, p) - a||_{2}$ najmanjši.
+
+
+\end{document}

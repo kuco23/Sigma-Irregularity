@@ -110,8 +110,7 @@ def randomDistributedConnectedGraph(n, p):
     addEdges(G, edges)
     return G
 
-def randomSigmaOptAprox(n, m):
-    p = 2 * m / (n * (n - 1))
+def randomSigmaOptAprox(n, p):
     nmin, nmax = floor(n / 2), ceil(n / 2)
     G1 = randomDistributedConnectedGraph(nmin, p)
     G2 = randomDistributedConnectedGraph(nmax, 1 - p)

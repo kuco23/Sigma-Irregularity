@@ -1,5 +1,5 @@
 from math import ceil
-from random import randint, random, choice
+from random import randrange, random, choice
 
 from ._base_defs import sigmaRatio, sigmaArgmax
 from ._random_extension import randomPermutations
@@ -34,10 +34,12 @@ def _testSwitch(G, source, r, a):
     return sigma, removed, added
 
 def localBasicNeighbor(G, diff):
-    lim = ceil(diff * len(G) / 10)
-    source = choice(sigmaArgmax(G)[1])
+    n = len(G)
+    lim = ceil(diff * n / 10)
+    source = choice(choice(sigmaArgmax(G, lim))[1])
     perms = randomPermutations(
-        range(lim), reversed(range(lim))
+        range(n, n + 10),
+        reversed(range(n, n + 10))
     )
     sigma_opt, rem_opt, add_opt = 0, [], []
     for _, (r, a) in zip(range(lim), perms):
@@ -64,5 +66,7 @@ def globalBasicNeighbor(G, temp):
 
 def globalTwoPartNeighbor(G, temp):
     n, m = len(G), sum(map(len, G))
-    G[:] = randomSigmaOptAprox(n, 0.1)
+    G[:] = randomSigmaOptAprox(
+        n, 0.1
+    )
     return sigmaRatio(G)
