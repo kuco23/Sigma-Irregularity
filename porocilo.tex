@@ -61,7 +61,7 @@ medtem, ko v preostalih $n /2$ vozliščih povežemo 3 vozlišča z dvema poveza
 Po kratkem premisleku lahko formuliramo naslednjo neenakost.
 $$\sigma_r(G_{2n}) > \frac{(n - 3)n \binom{n}{2}}{2} = \frac{(n - 3)n n(n - 1)}{4} = \Theta(n^4)$$.
 \\
-S tem smo zaključili proučevanje nepovezanih grafov.
+S tem sva zaključila preučevanje nepovezanih grafov.
 
 \section{Ideja Iskanja Optimalnih Grafov}
 Problem bova reševala v Pythonu in si občasno pomagala s knjižnjico Networkx,
@@ -72,7 +72,7 @@ Za optimalno vrednost $\sigma_r$ na grafih reda $n$ morava testirati vse neizomo
 grafe tega reda, katerih je $\Omega(2^n)$. Če upoštevamo, da izračun $\sigma_r(G)$ 
 zahteva $\Omega(n^2)$ operacij, dobimo skupno časovno zahtevnost $\Omega(n^2 2^n)$.
 Očitno ta zahtevnost predstavlja problem že za grafe reda $10$, 
-torej bova morala poiskati alternativen pristop v obliki metaheurističnih algoritmov. \\
+torej bova morala poiskati alternativni pristop v obliki metaheurističnih algoritmov. \\
 
 Ideja bo torej sistematično postopati po prostoru povezanih enostavnih grafov reda $n$ in 
 tako iskati aproksimacijo grafa $G$, ki maksimizira vrednost $\sigma_r$ na tem prostoru.
