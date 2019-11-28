@@ -8,7 +8,7 @@ from ._random_graphs import (
     randomSigmaOptAprox
 )
 
-def maxSigmaRatio_annealing_modified(
+def maxSigmaRatio_annealing(
     n, m, nsim, alterLocal,
     defaultG=None
 ):

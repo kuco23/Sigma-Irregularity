@@ -10,6 +10,12 @@ def _diff(c, x, b):
         map(lambda y, d: c * y - d, x, b)
     )))
 
+def squares(x, a):
+    norm = scalarProduct(x, x)
+    prod = scalarProduct(x, a)
+    c = prod / norm
+    return c, _diff(c, x, a)
+
 def powerAproximation(data, p0, p1, k, nrange):
     it, t, n = [], p0, len(data)
     while t <= p1:
@@ -18,13 +24,10 @@ def powerAproximation(data, p0, p1, k, nrange):
 
     diffopt, copt, popt = inf, 0, 0
     for p in it:
-        rng = [pow(i, p) for i in nrange]
-        norm = scalarProduct(rng, rng)
-        prod = scalarProduct(data, rng)
-        c = prod / norm
-        df = _diff(c, rng, data)
+        x = [pow(i, p) for i in nrange]
+        c, d = squares(x, data)
         if df < diffopt:
-            diffopt = df
+            diffopt = d
             copt, popt = c, p
 
     return diffopt, copt, popt

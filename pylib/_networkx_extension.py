@@ -39,9 +39,12 @@ def nxToNeighborList(G):
 def simplePlot(G, save_loc=None):
     G = neighborListToNx(G)
     pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(G, pos, node_size=5)
+    nx.draw_networkx_nodes(G, pos, node_size=5, node_color='red')
     nx.draw_networkx_edges(G, pos)
-    plt.show() if not save_loc else plt.savefig(
-        save_loc
-    ), plt.cla()
+    plt.axis('off')
+    plt.show() if save_loc is None else (
+        plt.savefig(
+            save_loc
+        ), plt.cla()
+    )
 
