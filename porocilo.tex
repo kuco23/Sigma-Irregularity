@@ -34,6 +34,22 @@ Ker nas grafi, za katere to razmerje ni definirano,
 torej v primeru $\sigma(G) = 0$, ne zanimajo, definiramo $\sigma_r(G) = 0$.
 To je natanko tedaj, kadar so vse komponenete grafa $G$ regularne.
 
+\subsection{Naloge}
+
+Najina glavna naloga je torej poiskati maksimalno razmerje $\sigma_r(G)$ med grafi na $n$
+vozliščih in jih temeljito preučiti. Najprej bova to počela za majhne grafe, potem pa bova 
+z algoritmi problem reševala še za grafe reda $n$. \\
+
+Po prvih oprijemljivih ugotovitvah naju čakajo naslednje naloge. \\
+
+Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav vedno na absolutni razliki $1$. \\
+To bova preverila tako, da bova izračunala število vozlišč za katera
+to ne velja pri vsakem optimalnem grafu in ta prikazala z grafom. \\
+
+Naslednja stvar, ki pa jo bova morala preveriti je ta, da je sup$$\frac{\sigma_t(G)}{\sigma(G)}$$ 
+reda $O(n^2)$. 
+Poiskati bova morala še ustrezno konstanto $c$ s katero bo aproksimacija $cn^2$ najustreznejša.
+
 \section{Osnovna Teorija}
 
 \subsection{Maksimalna Stopnja Naraščanja}
@@ -135,14 +151,6 @@ bolj splošni globalni okolici.
 Po dobljenem optimumu se lotimo še popravljanja, ki nastopi v obliki
 minimizacije $\sigma(G)$ tako da se osredotočimo na povezave, kjer
 je razlika med $d_G(v)$ in $d_G(u)$ za neka $uv \in E(G)$ največja.
-
-\subsection{Hipoteza}
-
-Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav
-vedno na absolutni razliki $1$.
-
-To bova preverila tako, da bova izračunala število vozlišč za katera
-to ne velja pri vsakem optimalnem grafu in ta prikazala z grafom.
 
 \subsection{Distribucija stopenj vozlišč}
 Narisala bova graf na katerem bosta za graf $G$ velikosti $n$ izpisani
