@@ -15,7 +15,7 @@ def maxSigmaRatio_annealing(
     prob = lambda ci, cr, t: exp((ci - cr) / t)
     temp = lambda i: 1 / log(i)
     
-    curi = defaultG or randomSigmaOptAprox(n, m)
+    curi = defaultG or randomSigmaOptAprox(n, n // 2, m)
     srat = sigmaRatio(curi)
     best = (deepcopy(curi), srat)
     curr = (deepcopy(curi), srat)

@@ -4,6 +4,13 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.animation
 
+def nxConversion(fun):
+    def wrapper(G, *args, **kwargs):
+        if isinstance(G, list):
+            G = neighborListToNx(G)
+        return fun(G, *args, **kwargs)
+    return wrapper
+
 def sigma_nx(G):
     sm = 0
     for u, v in G.edges():
@@ -36,15 +43,25 @@ def nxToNeighborList(G):
         G.nodes()
     )
 
-def simplePlot(G, save_loc=None):
+@nxConversion
+def simplePlot(G, path=None):
     G = neighborListToNx(G)
+    fig, ax = plt.subplots(figsize=(20, 5))
     pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(G, pos, node_size=5, node_color='red')
-    nx.draw_networkx_edges(G, pos)
+    nx.draw_networkx_nodes(
+        G, pos, alpha=0.5,
+        node_size=5, node_color='red')
+    nx.draw_networkx_edges(G, pos, alpha=0.4)
     plt.axis('off')
-    plt.show() if save_loc is None else (
+    plt.show() if path is None else (
         plt.savefig(
-            save_loc
+            path
         ), plt.cla()
     )
 
+@nxConversion
+def simpleWriteG6(G, path, **kwargs):
+    nx.write_graph6(G, path, **kwargs)
+
+def simpleReadG6(path):
+    return nx.read_graph6(path)

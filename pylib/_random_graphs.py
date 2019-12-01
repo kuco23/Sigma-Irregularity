@@ -110,14 +110,14 @@ def randomDistributedConnectedGraph(n, p):
     addEdges(G, edges)
     return G
 
-def randomSigmaOptAprox(n, p):
-    nmin, nmax = floor(n / 2), ceil(n / 2)
-    G1 = randomDistributedConnectedGraph(nmin, p)
-    G2 = randomDistributedConnectedGraph(nmax, 1 - p)
+def randomSigmaOptAprox(n, nsplit, p):
+    n1, n2 = nsplit, n - nsplit
+    G1 = randomDistributedConnectedGraph(n1, p)
+    G2 = randomDistributedConnectedGraph(n2, 1 - p)
     for row in G2:
         for i in range(len(row)):
-            row[i] += nmin
-    G1[0].append(nmin)
+            row[i] += n1
+    G1[0].append(n1)
     G2[0].append(0)
     G1.extend(G2)
     return G1

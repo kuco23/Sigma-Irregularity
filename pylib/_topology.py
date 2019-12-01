@@ -13,44 +13,36 @@ from ._edge_tools import (
     nonBridges, nonEdges
 )
 
-def _testSwitch(G, source, r, a):
-    n, m = len(G), sum(map(len, G))
-    m_total = n * (n - 1) // 2
-    removed, added = [], []
-        
-    if m >= n:
-        nremove = min(r, m - (n - 1))
-        removed = nonBridges(G, source, nremove)
-        removeEdges(G, removed)
-            
-    if m < m_total:
-        nadd = min(a, m_total - m)
-        added = nonEdges(G, source, nadd)
-        addEdges(G, added)
-            
-    sigma = sigmaRatio(G)
-    addEdges(G, removed)
-    removeEdges(G, added)
-    return sigma, removed, added
+def _chooseSource(G):
+    return sorted(
+        sigmaArgmax(G),
+        key=lambda i: len(G[i])
+    )
 
 def localBasicNeighbor(G, diff):
-    n = len(G)
-    lim = ceil(diff * n / 10)
-    source = choice(sigmaArgmax(G))
-    perms = randomPermutations(
-        range(n, n + 10),
-        reversed(range(n, n + 10))
-    )
-    sigma_opt, rem_opt, add_opt = 0, [], []
-    for _, (r, a) in zip(range(lim), perms):
-        if not (r or a): continue
-        sigma, *diff = _testSwitch(G, source, r, a)
-        if sigma > sigma_opt:
-            rem_opt, add_opt = diff
-            sigma_opt = sigma
+    n, m = len(G), sum(map(len, G)) // 2
+    m_total = n * (n - 1) // 2
+    asource, rsource = _chooseSource(G)
+
+    k = randrange(0, 11)
+    nadd = m_total - m if m + k > m_total else k
+    nrem = 0 if m - k < n - 1 else 10 - k
+    to_add = nonEdges(G, asource, nadd) if nadd else []
+    to_rem = nonBridges(G, rsource, nrem) if nrem else []
     
-    addEdges(G, add_opt)
-    removeEdges(G, rem_opt)
+    sigma_opt = -1
+    for u in to_add:
+        addEdges(G, [u])
+        r = sigmaRatio(G)
+        if r >= sigma_opt: sigma_opt = r
+        else: removeEdges(G, [u])
+        
+    for u in to_rem:
+        removeEdges(G, [u])
+        r = sigmaRatio(G)
+        if r >= sigma_opt: sigma_opt = r
+        else: addEdges(G, [u])
+    
     return sigma_opt
 
 def globalBasicNeighbor(G, temp):
@@ -65,7 +57,10 @@ def globalBasicNeighbor(G, temp):
 
 def globalTwoPartNeighbor(G, temp):
     n, m = len(G), sum(map(len, G))
+    l = max(map(len, map(lambda u: G[u], sigmaArgmax(G))))
+    nsplit = round(l + 0.1 * randint(-1, 1) * n / 10)
+    if not 0 < nsplit < n: nsplit = n // 2
     G[:] = randomSigmaOptAprox(
-        n, 0.1
+        n, nsplit, 0.01 * randrange(0, 25)
     )
     return sigmaRatio(G)

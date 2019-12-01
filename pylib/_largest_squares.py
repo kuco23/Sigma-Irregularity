@@ -26,7 +26,7 @@ def powerAproximation(data, p0, p1, k, nrange):
     for p in it:
         x = [pow(i, p) for i in nrange]
         c, d = squares(x, data)
-        if df < diffopt:
+        if d < diffopt:
             diffopt = d
             copt, popt = c, p
 
