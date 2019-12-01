@@ -19,21 +19,20 @@ from pylib import (
     simplePlot, simpleWriteG6, simpleReadG6
 )
 
-nsim_global, nsim_local = 200, 20
-nrange = range(3, 20)
+nsim_global, nsim_local = 50, 30
+nrange = range(3, 1000)
 index, ascende, opts = [], [], []
 for i in nrange:
     startedges = i * (i - 1) // 2
     g, rg = maxSigmaRatio_annealing(
-        i, startedges, nsim_global,
+        i, startedges, nsim_global + i // 2,
         globalTwoPartNeighbor
     )
     g, r = maxSigmaRatio_annealing(
         i, startedges, nsim_local,
         localBasicNeighbor
     )
-    if i == 10: simplePlot(g)
-    opts.append(g)
+    if i >= 100: opts.append(g)
     ascende.append(r)
     print(i, r)
 
@@ -48,4 +47,4 @@ ax.grid(color='grey', linestyle='-', linewidth=0.25, alpha=0.5)
 _, c, p = powerAproximation(ascende, 0, 4, 1000, nrange)
 ax.plot(nrange, ascende, 'r')
 ax.plot(nrange, list(map(lambda n: c * pow(n, p), nrange)), 'g')
-plt.show()
+plt.savefig('graph')

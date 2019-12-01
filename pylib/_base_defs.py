@@ -1,4 +1,5 @@
 from math import inf
+import heapq as hp
 from itertools import combinations
 
 def sigma(G):
@@ -20,7 +21,28 @@ def sigmaRatio(G):
     sG, stG = sigma(G), sigma_t(G)
     return stG / sG if sG > 0 else 0
 
-
+def sigmaUpdate(G, edge, added):
+    sgn = [1, -1][added]
+    diff = 0
+    s, t = edge
+    ds, dt = map(len, (G[s], G[t]))
+    G[s].sort(), G[t].sort()
+    ns, nt = G[s], G[t]
+    i, j = 0, 0
+    while i < len(ns) and j < len(nt):
+        if i == len(ns): u = -1
+        elif j == len(nt): v = -1
+        else: u, v = ns[i], ns[j]
+        if u <= v:
+            i += 1
+            du = len(G[u])
+            diff += sgn * 2 * (dt - (du + sgn)) + 1
+        if v <= u:
+            j += 1
+            dv = len(G[v])
+            diff += sgn * 2 * (ds - (dv + sgn)) + 1
+    return diff
+        
 def sigmaArgmax(G):
     nodes, sup = None, -1
     for u, line in enumerate(G):
@@ -31,7 +53,6 @@ def sigmaArgmax(G):
                 sup = aprox
                 nodes = (u, v)
     return nodes
-
 
 def degreeContinuoutyIndex(G):
     sm = 0

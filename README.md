@@ -8,9 +8,9 @@ and connections between those extremal graphs.
 
 
 ## To do
--  [x] python support library
+- [x] python support library
 - [ ] C++ support library
 - [ ] C++ brute-force approach for small graphs
-- [ ] successful simulated annealing neighborhood implementation
+- [x] successful simulated annealing neighborhood implementation
 - [ ] successful variable neighborhood search implementation
 - [x] networkx algorithm animation

@@ -9,7 +9,7 @@ from ._random_graphs import (
 )
 
 def maxSigmaRatio_annealing(
-    n, m, nsim, alterLocal,
+    n, m, nsim, alterGraph,
     defaultG=None
 ):
     prob = lambda ci, cr, t: exp((ci - cr) / t)
@@ -22,7 +22,7 @@ def maxSigmaRatio_annealing(
     
     for i in range(2, nsim + 2):
         t = temp(i)
-        srat = alterLocal(curi, 5)
+        srat = alterGraph(curi)
 
         if srat >= curr[1]:
             curr = (deepcopy(curi), srat)
