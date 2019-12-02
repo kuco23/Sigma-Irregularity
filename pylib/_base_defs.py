@@ -44,15 +44,15 @@ def sigmaUpdate(G, edge, added):
     return diff
         
 def sigmaArgmax(G):
-    nodes, sup = None, -1
+    edge, sup = None, -1
     for u, line in enumerate(G):
         for v in line:
             du, dv = map(len, (G[u], G[v]))
             aprox = abs(du - dv)
             if aprox > sup:
                 sup = aprox
-                nodes = (u, v)
-    return nodes
+                edge = (u, v)
+    return edge
 
 def degreeContinuoutyIndex(G):
     sm = 0

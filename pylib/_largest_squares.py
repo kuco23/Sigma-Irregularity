@@ -30,4 +30,4 @@ def powerAproximation(data, p0, p1, k, nrange):
             diffopt = d
             copt, popt = c, p
 
-    return diffopt, copt, popt
+    return diffopt / sqrt(n), copt, popt

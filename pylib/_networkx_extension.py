@@ -1,3 +1,4 @@
+from math import ceil
 from itertools import combinations
 
 import networkx as nx
@@ -45,12 +46,12 @@ def nxToNeighborList(G):
 
 @nxConversion
 def simplePlot(G, path=None):
-    G = neighborListToNx(G)
-    fig, ax = plt.subplots(figsize=(20, 5))
+    fig, ax = plt.subplots(figsize=(20, 10))
     pos = nx.spring_layout(G)
     nx.draw_networkx_nodes(
-        G, pos, alpha=0.5,
-        node_size=5, node_color='red')
+        G, pos, alpha=0.8,
+        node_size=5, node_color='black'
+    )
     nx.draw_networkx_edges(G, pos, alpha=0.4)
     plt.axis('off')
     plt.show() if path is None else (
@@ -58,6 +59,23 @@ def simplePlot(G, path=None):
             path
         ), plt.cla()
     )
+
+def simpleSubplot(Gs : list):
+    h, w = ceil(len(Gs) / 3), 3
+    sp = int(f'{h}{w}1')
+    fig, ax = plt.subplots(figsize=(20, 5 * h))
+    for G in Gs:
+        pos = nx.spring_layout(G, iterations=100)
+        plt.subplot(sp)
+        plt.axis('off')
+        nx.draw_networkx_nodes(
+            G, pos, alpha=0.5,
+            node_size=5, node_color='lime',
+            linewidths=2.0
+        )
+        nx.draw_networkx_edges(G, pos, alpha=0.5, width=1.5)
+        sp += 1
+    plt.show()
 
 @nxConversion
 def simpleWriteG6(G, path, **kwargs):

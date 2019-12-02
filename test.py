@@ -4,31 +4,23 @@ from pylib import (
     
     removeEdges, addEdges,
     
-    localNeighbor,
-    globalNeighbor,
+    localBasicNeighbor,
+    globalBasicNeighbor,
+    globalTwoPartNeighbor,
 
-    maxSigmaRatio_annealing_modified,
-    maxSigmaRatio_bruteforce,
+    maxSigmaRatio_annealing,
 
     simplePlot,
     neighborListToNx,
 )
 
-
-g, r = maxSigmaRatio_annealing_modified(
-    9, 30, 100, localNeighbor, globalNeighbor
+g, r = maxSigmaRatio_annealing(
+    20, 80, 200, globalTwoPartNeighbor
 )
 
-'''
-G = randomPath(10)
-i = 0
-while True:
-    i = (i + 1) % 10
-    edges = nearDegree(G, i, 2)
-    addEdges(G, edges)
-    simplePlot(neighborListToNx(G))
-'''
+g, r = maxSigmaRatio_annealing(
+    20, 80, 200, localBasicNeighbor,
+    defaultG = g
+)
 
-G, r = maxSigmaRatio_annealing_modified(40, 100, 2000, localNeighbor, globalNeighbor)
-G_nx = neighborListToNx(G)
-simplePlot(G_nx)
+simplePlot(g)
