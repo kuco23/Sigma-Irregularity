@@ -51,7 +51,7 @@ Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav vedno na 
 To bova preverila tako, da bova izračunala število vozlišč za katera
 to ne velja pri vsakem optimalnem grafu in ta prikazala z grafom. \\
 
-Naslednja stvar, ki pa jo bova morala preveriti je ta, da je sup$$\frac{\sigma_t(G)}{\sigma(G)}$$ 
+Naslednja stvar, ki pa jo bova morala preveriti je ta, da je $sup$ $$\frac{\sigma_t(G)}{\sigma(G)}$$ 
 reda $O(n^2)$. 
 Poiskati bova morala še ustrezno konstanto $c$ s katero bo aproksimacija $cn^2$ najustreznejša.
 
@@ -115,7 +115,7 @@ Iz tega razloga sva poskusila implementacijo drugega algoritma.
 \section{Reševanje Problema}
 
 \subsection{Majhni grafi}
-Za majhne grafe sva na strani ** našla že generirane povezane neizomorfne grafe do stopnje 9.
+Za majhne grafe sva na strani ***** našla že generirane povezane neizomorfne grafe do stopnje 9.
 Na njih sva poiskala maksimalne $\sigma_r(G)$, ki so zapisane v naslednji tabeli.
 
 \begin{center}
@@ -147,8 +147,8 @@ Okolice so lahko poljubne in se delijo na lokalne in globalne.
 Lokalne okolice spreminjajo graf po povezavah, globalne pa
 konstruirajo nov graf, ki ima morda kakšne podobne karakteristike kot prejšnji.
 
-Izkazalo se je da aplikacija samo lokalnih okolic ni dovolj pri velikih grafih in sva zato
-iskanje izvedla v dveh delih. Prvi del je klicanje SA na globalni okolici, nakar
+Izkazalo se je, da za velike grafe aplikacija lokalnih okolic ni dovolj. Zato
+sva iskanje izvedla v dveh delih. Prvi del je klicanje SA na globalni okolici, nakar
 pa še na lokalni, saj ta naredi na tem male optimizacije, ki jih globalne spremembe 
 niso bile zmožne doseči.
 
@@ -164,7 +164,7 @@ Ta sestava je primerna, saj razlike med polnim grafom in redkim prispevajo
 k vrednosti $\sigma_t$, medtem ko vrednost $\sigma$ ostaja enaka, saj so v obeh
 delih grafa sosednje povezave podobnih stopenj. To je skoraj res, a naletimo na posebno povezavo,
 ki je prisotna v teh grafih in to je most med polnim in praznim podgrafom. Brez te povezave
-bi imeli stopnjo naraščanja $O(n^4)$, a njena prisotnos znatnot povišuje vrednost $\sigma$.
+bi imeli stopnjo naraščanja $O(n^4)$, a njena prisotnost znatno povišuje vrednost $\sigma$.
 \\\\
 Naš problem se po tej analizi prevede v to kako zvezno, torej s čim manjšo razliko stopenj sosednih povezav, 
 povezati poln podgraf z redkim. 
@@ -176,8 +176,8 @@ V nadaljevanju si bomo pogledali katero optimizacijo favorizirajo optimalni graf
 
 \subsection{Kvadratična stopnja naraščanja}
 Preveriti morava še, če je stopnja narašanja zaporedja
-$(\max(\sigma_r(G_n)))_n$, kjer $G_n$ graf stopnje $n \in \mathbb{N}$,
-$O(n^2)$ in poiskati ustrezno konstanto $c \in \mathbb{R}$, ki 
+$(\max(\sigma_r(G_n)))_n$, kjer je $G_n$ graf stopnje $n \in \mathbb{N}$,
+res $O(n^2)$. Tedaj pa poiskati ustrezno konstanto $c \in \mathbb{R}$, ki 
 se naraščanju najbolj prilega.
 \\\\
 Predpostavimo, da smo optimum izračunali za $n$ grafov in
@@ -204,7 +204,7 @@ njegova aproksimacija naraščanja je prikazana na naslednjem grafu.\\
 \includegraphics[width=\textwidth, height=8cm]{graphics/aproximation_graph.png}\\
 
 \subsection{Hipoteza o stopnjah vozlišč}
-Hipotezo, ki pravi da so vsa sosednja vozlišča stopnje, ki se razlikuje za največ 1, bova testirala
+Hipotezo ki pravi, da so vsa sosednja vozlišča stopnje, ki se razlikuje za največ 1, bova testirala
 z izračunom števila parov vozlišč, ki nimajo ustrezne razlike stopenj in seštela še vse njihove razlike.
 Rezultati so opisani na naslednjem grafu.\\
 \includegraphics[width=\textwidth, height=8cm]{graphics/degree_difference.png}\\
@@ -228,7 +228,7 @@ Torej grafi poskušajo poskrbeti za zvezni prehod iz polnega podgrafa k redkemu 
 žrtvujejo nekaj vozlišč, kar pa se na koncu pozna pri majhnih razlikah stopenj vozlišč.
 
 \subsection{Distribucija stopenj vozlišč}
-Ideja bo prikazati minimalne, maximalne in povprečne stopnje vozlišč pri danem optimalnem grafu na $n$ vozliščih.
+Ideja bo prikazati minimalne, maksimalne in povprečne stopnje vozlišč pri danem optimalnem grafu na $n$ vozliščih.
 Spodaj je prikazan graf, ki prikazuje prej povedano. \\
 \includegraphics[width=\textwidth, height=15cm]{graphics/degree_distribution.png}\\
 
