@@ -6,7 +6,6 @@ __pycache__
 *.fls
 *.log
 *.fdb_latexmk
-*.pdf
 *.g6
 *.png
 .ipynb_checkpoints

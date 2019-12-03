@@ -65,12 +65,12 @@ def simpleSubplot(Gs : list):
     sp = int(f'{h}{w}1')
     fig, ax = plt.subplots(figsize=(20, 5 * h))
     for G in Gs:
-        pos = nx.spring_layout(G, iterations=100)
+        pos = nx.spring_layout(G)
         plt.subplot(sp)
         plt.axis('off')
         nx.draw_networkx_nodes(
             G, pos, alpha=0.5,
-            node_size=5, node_color='lime',
+            node_size=5, node_color='black',
             linewidths=2.0
         )
         nx.draw_networkx_edges(G, pos, alpha=0.5, width=1.5)

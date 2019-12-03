@@ -14,3 +14,4 @@ and connections between those extremal graphs.
 - [x] successful simulated annealing neighborhood implementation
 - [ ] successful variable neighborhood search implementation
 - [x] networkx algorithm animation
+- [x] jupyter notebook code documentation

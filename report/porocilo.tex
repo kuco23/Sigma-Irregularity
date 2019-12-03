@@ -159,20 +159,20 @@ Po nekaj testih je začela biti očitna struktura optimalnih grafov in sicer
 njihova oblika je sestavljena iz dveh delov. V prvem nastopa polni podgraf, 
 na drugem pa so povezave redke in je zato podgraf blizu drevesu, kot lahko 
 vidimo na spodnji sliki grafa na 20ih vozliščih. \\
-\includegraphics[width=\textwidth, height=8cm]{sample.png} \\
+\includegraphics[width=\textwidth, height=8cm]{graphics/sample.png} \\
 Ta sestava je primerna, saj razlike med polnim grafom in redkim prispevajo 
 k vrednosti $\sigma_t$, medtem ko vrednost $\sigma$ ostaja enaka, saj so v obeh
 delih grafa sosednje povezave podobnih stopenj. To je skoraj res, a naletimo na posebno povezavo,
 ki je prisotna v teh grafih in to je most med polnim in praznim podgrafom. Brez te povezave
 bi imeli stopnjo naraščanja $O(n^4)$, a njena prisotnos znatnot povišuje vrednost $\sigma$.
-
+\\\\
 Naš problem se po tej analizi prevede v to kako zvezno, torej s čim manjšo razliko stopenj sosednih povezav, 
-povezati poln podgraf z redkim.
-
-\subsection{Distribucija stopenj vozlišč}
-Narisala bova graf na katerem bosta za graf $G$ velikosti $n$ izpisani
-vrednosti $\sigma_r(G)$ in $\max_{v \in V(G)}d_G(v)$ na katerem
-se bo lepo videla korelacija.
+povezati poln podgraf z redkim. 
+Za to potrebujemo veliko vozlišč, ki bodo poskrbeli za "zvezno" pot med tima podgrafoma,  
+a jih hkrati potrebujemo malo povezane, da maksimizirajo $\sigma_t$ vrednost, saj se ta primerja
+z nastalim polnim grafom. Problem nam torej predstavljata tudi spodbijajoči optimizaciji $\sigma$ ter $\sigma_t$.
+\\\\
+V nadaljevanju si bomo pogledali katero optimizacijo favorizirajo optimalni grafi.
 
 \subsection{Kvadratična stopnja naraščanja}
 Preveriti morava še, če je stopnja narašanja zaporedja
@@ -197,18 +197,47 @@ izračunali prej definirani $c$, na koncu pa izbrali tisto kombinacijo
 $(c, p)$, za katero je $||cX(n, p) - a||_{2}$ najmanjši.
 \\\\
 Tako dobimo po testiranju na vozliščih od $3$ do $700$ naslednji graf.\\
-\includegraphics[width=\textwidth, height=8cm]{raw_graph.png} \\
+\includegraphics[width=\textwidth, height=8cm]{graphics/raw_graph.png} \\
 Po prej opisani metodi dobimo par $(c, p)$, za katerega $cn^p$ najbolje opisuje
 $\sigma_r$ naraščanje. Ta par je izračunan kot $(0.19319714558507617, 2.0360000000000014)$ in
 njegova aproksimacija naraščanja je prikazana na naslednjem grafu.\\
-\includegraphics[width=\textwidth, height=8cm]{aproximation_graph.png}\\
+\includegraphics[width=\textwidth, height=8cm]{graphics/aproximation_graph.png}\\
 
-\subsection{Opisi Implementiranih Algoritmov}
+\subsection{Hipoteza o stopnjah vozlišč}
+Hipotezo, ki pravi da so vsa sosednja vozlišča stopnje, ki se razlikuje za največ 1, bova testirala
+z izračunom števila parov vozlišč, ki nimajo ustrezne razlike stopenj in seštela še vse njihove razlike.
+Rezultati so opisani na naslednjem grafu.\\
+\includegraphics[width=\textwidth, height=8cm]{graphics/degree_difference.png}\\
+Naraščanje je predvsem linearno in sicer sta najboljši linearni aproksiciji koeficientov enaki
+$2.7894615404336047$ in $0.5748786913019662$, glede na horizontalno zaporedje slik.
+Spodaj je prikazana še linearna aproksimacija. \\
+\includegraphics[width=\textwidth, height=8cm]{graphics/degree_difference_linear_aproximation.png}\\
+\\
+Na levem grafu vidimo, da je vsota stopenj vozišč majhna, saj je povprečno njena vrednost
+le trikratnik števila vozlišč, torej ima vsako vozlišče povprečno stopnjo $3$, kot tudi namiguje koeficient.
+Na desnem grafu takoj opazimo, da je naraščanje števila parov vozlišč, ki ne ustrezajo pogoju
+zelo majhno, saj narašča počasneje kot stopnja vozlišč, čeprav je njeno potencialno naraščanje
+$\binom{n}{2}$. 
+Seveda je rezultat smiseln, saj poskušamo minimizirati $\sigma$ vrednost, katera pa narašča
+skupaj z naraščanjem razlik stopenj sosednih vozlišč. 
+\\\\
+Vrnimo se nazaj na problem optimalnega povezanja polnega podgrafa s praznim. 
+Sva mnenja, da so rezultati pozitivna indikacija na to, da se ta pot naravno formira na način, 
+ki favorizira minimizacijo $\sigma$ vrednosti napram maksimizacije $\sigma_t$ vrednosti.
+Torej grafi poskušajo poskrbeti za zvezni prehod iz polnega podgrafa k redkemu in za to 
+žrtvujejo nekaj vozlišč, kar pa se na koncu pozna pri majhnih razlikah stopenj vozlišč.
+
+\subsection{Distribucija stopenj vozlišč}
+Ideja bo prikazati minimalne, maximalne in povprečne stopnje vozlišč pri danem optimalnem grafu na $n$ vozliščih.
+Spodaj je prikazan graf, ki prikazuje prej povedano. \\
+\includegraphics[width=\textwidth, height=15cm]{graphics/degree_distribution.png}\\
+
+\section{Opisi Implementiranih Algoritmov}
 Podali bomo kratek opis vseh vključenih algoritmov v napisani knjižnici in njihovo časovno zahtevnost.
 V tabeli bo $n$ označeval število vozlišč grafa, $m$ pa število povezav.
 \begin{center}
     \begin{tabular}{ l  l  l}
-      Ime & Opis & T \\ 
+      Ime & Kratek Opis & T \\ 
       {\em sigma} & izračuna vrednost $\sigma(G)$ na danem grafu $G$ & $O(n + m)$ \\
       {\em sigma\_t} & izračuna vrednost $\sigma_t(G)$ na danem grafu $G$ & $O(n^2)$ \\
       {\em sigmaRatio} & izračuna vrednost $\sigma_r(G)$ na danem grafu $G$ & $O(n^2)$ \\
@@ -220,7 +249,7 @@ V tabeli bo $n$ označeval število vozlišč grafa, $m$ pa število povezav.
       {\em randomSubtree} & poišče naključno poddrevo danega grafa & $O(n)$ \\
       {\em randomSigmaOptAprox} & konstruira graf, ki naj bi bil grob približek optimalnemu & $O(n^2)$ \\
       {\em nonBridges} & poišče $k$ povezav, ki niso mostovi v danem grafu & $O(m + n)$ \\
-      {\em nonEdges} & poišče $k$ povezav, ki niso vključene v grafu & $O(n^2)$ \\
+      {\em nonEdges} & poišče $k$ povezav, ki niso vključene v dani graf & $O(n^2)$ \\
       {\em localBasicNeighbor} & graf spremeni z dodajanjem in odstranjevanjem povezav & $O(n^2)$ \\
       {\em globalBasicNeighbor} & uporabi {\em randomConnectedGraph} za konstrukcijo okolice & $O(n^2 \log^*(n))$ \\ 
       {\em globalTwoPartNeighbor} & uporabi {\em randomSigmaOptAprox} za konstrukcijo okolice & $O(n^2)$ \\
