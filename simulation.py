@@ -70,12 +70,10 @@ with open('test_results/degree_distribution_500.json') as file:
 mn, mx, avg = list(zip(*deg_distrib))
 node_range = range(3, 3 + len(deg_distrib))
 
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(8, 50))
-setAxDefaults(ax1, '', '', 'Minimalna stopnja')
-setAxDefaults(ax2, '', '', 'Maksimalna stopnja')
-setAxDefaults(ax3, '', '', 'Povpreèna stopnja')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+setAxDefaults(ax1, 'Maksimalna stopnja', '', '')
+setAxDefaults(ax2, 'Povpreèna stopnja', '', '')
 
-ax1.plot(node_range, mn, 'purple')
-ax2.plot(node_range, mx, 'orange')
-ax3.plot(node_range, avg, 'red')
+ax1.plot(node_range, mx, 'purple')
+ax2.plot(node_range, avg, 'orange')
 plt.show()
