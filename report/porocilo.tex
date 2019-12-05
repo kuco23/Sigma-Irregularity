@@ -83,7 +83,7 @@ naraščanja $O(n^4)$ je sledeča.
 Vzamemo $n / 2$ vozlišč in iz njih konstruiramo poln graf
 medtem, ko v preostalih $n /2$ vozliščih povežemo 3 vozlišča z dvema povezavama.
 Po kratkem premisleku lahko formuliramo naslednjo neenakost.
-$$\sigma_r(G_{2n}) > (n - 3) n (n - 1)^2 = \Theta(n^4)$$.
+$$\sigma_r(G_{2n}) = \frac{\sigma_t(G_{2n})}{\sigma(G_{2n})} =  \frac{\sigma_t(G_{2n})}{2}  <  (n - 3) n (n - 1)^2 = \Theta(n^4)$$.
 \\
 S tem sva zaključila preučevanje nepovezanih grafov.
 
@@ -121,7 +121,7 @@ s skupino parametrov, ki bo opisana kasneje.
 
 \subsection{Majhni grafi}
 Za majhne grafe sva našla že generirane povezane neizomorfne grafe do stopnje 9 in poiskala vrednosti 
-$$M_n = (\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_{n=2}^9,$$
+$$(M_n)_{n} = (\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_{n=2}^9,$$
 ki so zapisane v naslednji tabeli.
 
 \begin{center}
@@ -144,7 +144,7 @@ se lotimo implementacije {\em Simulated Annealing} algoritma.
 \subsection{Večji grafi}
 
 Med večjimi grafi bomo optimume iskali s pomočjo algoritma SA ({\em Simulated Annealing}). 
-Ta sprejme 4 obvezne argumente: število vozlišč, število povezav, število simulacij in definicijo okolice grafa.
+Ta prejme 3 pomembne argumente: število vozlišč, število simulacij in definicijo okolice grafa.
 
 Okolice so lahko poljubne in se delijo na lokalne in globalne.
 Lokalne okolice spreminjajo graf po povezavah, globalne pa
