@@ -43,7 +43,7 @@ V nadaljevanju bomo zaradi preprostosti prostor grafov na $n$ vozliščih označ
 \subsection{Naloge}
 
 Najina glavna naloga je poiskati maksimalno razmerje $\sigma_r(G)$ za $G \in \mathscr{G}_n$.
-Najprej bova to počela za majhne grafe, potem pa bova z algoritmi problem reševala še za grafe reda višjih redov. 
+Najprej bova to počela za majhne grafe, potem pa bova z algoritmi problem reševala še za grafe višjega reda. 
 Po prvih oprijemljivih ugotovitvah naju čakajo naslednje naloge. \\
 
 Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav vedno na absolutni razliki $1$. \\
@@ -106,15 +106,15 @@ Za učinkovito delovanje teh procesov pa potrebujemo definirati ustrezno topolog
 na prostoru, torej podati pojem bližine, saj jo zahteva večina hevrističnih algoritmov.
 
 To bova naredila med drugim tudi z zaporednim dodajanjem ali odstranjevanjem naključnih povezav v 
-danem grafu, pri čimer morava paziti, da ohranjava povezanost grafa, 
-torej z drugimi besedami ne odstraniva mostov.\\
+danem grafu, pri čimer morava paziti, da ohranjava povezanost grafa. 
+Torej z drugimi besedami ne odstraniva mostov.\\
 Za te namene sva napisala knjižnjico, ki poda podporo za izbiro teh povezav
-in splošno generiranje naključnih povezanih grafov skupaj z nekaterimi drugimi orodji.
+in splošno generiranje naključnih povezanih grafov, skupaj z nekaterimi drugimi orodji.
 
 \subsection{Simulated Annealing}
 Eden od algoritmov, ki naj bi rešil ta problem je {\em Simulated Annealing}, 
 katerega implementacija je končana.
-Algoritem je uporabljen za iskanje vseh optmalnih grafov v nadaljevanju naloge in parametriziran
+Algoritem je uporabljen za iskanje vseh optimalnih grafov v nadaljevanju naloge in parametriziran
 s skupino parametrov, ki bo opisana kasneje.
 
 \section{Reševanje Problema}
@@ -138,13 +138,13 @@ ki so zapisane v naslednji tabeli.
     \end{tabular}
 \end{center}
 
-Grafov na višjem  številu vozlišč je preveč za posamično analizo, torej
+Grafov na višjem številu vozlišč je preveč za posamično analizo, torej
 se lotimo implementacije {\em Simulated Annealing} algoritma.
 
 \subsection{Večji grafi}
 
 Med večjimi grafi bomo optimume iskali s pomočjo algoritma SA ({\em Simulated Annealing}). 
-Ta sprejme 3 argumente: število vozlišč, število simulacij in definicijo okolice grafa.
+Ta sprejme 4 obvezne argumente: število vozlišč, število povezav, število simulacij in definicijo okolice grafa.
 
 Okolice so lahko poljubne in se delijo na lokalne in globalne.
 Lokalne okolice spreminjajo graf po povezavah, globalne pa
@@ -168,7 +168,7 @@ delih grafa sosednje povezave podobnih stopenj. To je skoraj res, a naletimo na 
 ki je prisotna v teh grafih in to je most med polnim in praznim podgrafom. Brez te povezave
 bi imeli stopnjo naraščanja $O(n^4)$, a njena prisotnost znatno povišuje vrednost $\sigma$.
 \\\\
-Naš problem se po tej analizi prevede v to kako 'zvezno', torej s čim manjšo razliko stopenj sosednih povezav, 
+Naš problem se po tej analizi prevede v to, kako 'zvezno', torej s čim manjšo razliko stopenj sosednih povezav, 
 povezati poln podgraf z redkim. 
 Za to potrebujemo veliko vozlišč, ki bodo poskrbeli za 'zvezno' pot med tima podgrafoma,  
 a jih hkrati potrebujemo malo povezane, da maksimizirajo $\sigma_t$ vrednost, saj se ta primerja
@@ -210,14 +210,14 @@ hkrati pa se najboljša polinomska aproksimacija približuje $n \to n^2$.
 \pagebreak
 
 \subsection{Hipoteza o stopnjah vozlišč}
-Hipotezo ki pravi, da so vsa sosednja vozlišča stopnje, ki se razlikuje za največ 1, bova testirala
+Hipotezo, ki pravi, da so vsa sosednja vozlišča stopnje, ki se razlikuje za največ 1, bova testirala
 z izračunom števila parov vozlišč, ki nimajo ustrezne razlike stopenj in seštela še vse njihove razlike.
 Rezultati, skupaj z linearno aproksimacijo, so opisani na naslednjem grafu.\\
 \includegraphics[width=\textwidth, height=6cm]{graphics/degree_difference_linear_aproximation.png}\\
 Naraščanje je predvsem linearno in sicer sta najboljši linearni aproksiciji koeficientov enaki
 $2.7895$ in $0.5749$, glede na horizontalno zaporedje slik.
 \\\\
-Na levem grafu vidimo, da je vsota stopenj vozišč majhna, saj je povprečno njena vrednost
+Na levem grafu vidimo, da je vsota stopenj vozišč majhna. Saj je povprečno njena vrednost
 le trikratnik števila vozlišč, torej se povprečno vozlišči na razliki stopenj večji od $1$ razlikujeta v stopnji za $3$, 
 kot tudi namiguje koeficient.\\
 Na desnem grafu takoj opazimo, da je naraščanje števila parov vozlišč, ki ne ustrezajo pogoju
