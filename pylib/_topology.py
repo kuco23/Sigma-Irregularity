@@ -22,7 +22,7 @@ def _chooseSources(G):
 def localBasicNeighbor(G):
     n, m = len(G), sum(map(len, G)) // 2
     m_total = n * (n - 1) // 2
-    asource, rsource = _chooseSources(G)
+    asource, rsource = randrange(0, n), randrange(0, n)
 
     k = randrange(0, 11)
     nadd = m_total - m if m + k > m_total else k
@@ -30,7 +30,6 @@ def localBasicNeighbor(G):
     to_add = nonEdges(G, asource, nadd) if nadd else []
     to_rem = nonBridges(G, rsource, nrem) if nrem else []
     
-    sigma_opt = 0
     for e in to_add:
         addEdges(G, [e])
         diff = sigmaUpdate(G, e, True)

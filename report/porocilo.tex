@@ -24,7 +24,7 @@
 
 \section{Uvod}
 
-V projektni nalogi se bova ukvarjala z merjenjem iregularnosti enostavnih neusmerjenih grafov z
+V projektni nalogi se bova ukvarjala z meritvijo iregularnosti enostavnih neusmerjenih grafov z
 dvema na videz podobnima metodama, {\em $\sigma$-irregularity} in {\em total $\sigma$-irregularity},
 definiranima kot 
 $$
@@ -32,7 +32,7 @@ $$
 \quad \text{in} \quad
 \sigma_t(G) = \sum_{(u, v) \in V(G)}(d_u - d_v)^2
 $$
-Cilj naloge je maksimizacija razmerja, definiranega kot 
+Cilj naloge je maksimizacija razmerja 
 $$\sigma_r(G) = \frac{\sigma_t(G)}{\sigma(G)}$$
 pri danem redu grafa $n \in \mathbb{N}$.
 Ker nas komponentno regularni grafi, za katere to razmerje ni definirano,
@@ -43,12 +43,12 @@ V nadaljevanju bomo zaradi preprostosti prostor grafov na $n$ vozliščih označ
 \subsection{Naloge}
 
 Najina glavna naloga je poiskati maksimalno razmerje $\sigma_r(G)$ za $G \in \mathscr{G}_n$.
-Najprej bova to počela za majhne grafe, potem pa bova z algoritmi problem reševala še za grafe višjega reda. 
+Najprej bova to počela za majhne grafe, potem pa bova z drugačnimi metodami problem reševala še za grafe višjega reda. 
 Po prvih oprijemljivih ugotovitvah naju čakajo naslednje naloge. \\
 
 Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav vedno na absolutni razliki $1$. \\
-To bova preverila tako, da bova izračunala število vozlišč za katera
-to ne velja pri vsakem optimalnem grafu in ta prikazala z grafom. \\
+To bova preverila z izračunom števila vozlišč za katera
+to ne velja pri vsakem optimalnem grafu in ta grafično prikazala. \\
 
 Naslednja stvar, ki pa jo bova morala preveriti je ta, da je $(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$ 
 reda $O(n^2)$. 
@@ -65,7 +65,7 @@ Po premisleku se lahko prepričamo, da bo za graf $G \in \mathscr{G}_n$ največj
 bodo vsa vozlišča stopnje $n - 1$ ali $0$, saj bo tako kvadratična razlika med njimi največja.
 Zanima nas torej število vozlišč s stopnjo $n$, $x$, ki maksimizira funkcijo
 $f(x) = x (n - x)$, saj ta predstavlja število kombinacij parov vozlišč s stopnjo $n - 1$ in $0$.
-Z odvajanjem poiščemo maksimum, ki je dosežen pri $n / 2$ in zato velja spodnja neenakost.
+Z odvajanjem poiščemo maksimum, ki je dosežen pri $n / 2$, zato velja
 $$
 \sigma_r(G) = \frac{\sigma_t(G)}{\sigma(G)} 
 \leq \sigma_t(G) \leq \frac{n}{2} \frac{n}{2} (n - 1)^2 
@@ -78,12 +78,12 @@ Ker sva opazila, da družina nepovezanih grafov doseže maksimalno stopnjo nara�
 se lahko po konstrukciji družine takšnih grafov $G_n$ za $\forall n \in \mathbb{N}$
 osredotočimo samo na povezane grafe.
 \\\\
-Konstrukcije grafov $G_n$, za katere ima zaporedje  $(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$  stopnjo 
+Konstrukcija grafov $G_n$, za katere ima zaporedje  $(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$  stopnjo 
 naraščanja $O(n^4)$ je sledeča.
 Vzamemo $n / 2$ vozlišč in iz njih konstruiramo poln graf
 medtem, ko v preostalih $n /2$ vozliščih povežemo 3 vozlišča z dvema povezavama.
 Po kratkem premisleku lahko formuliramo naslednjo neenakost.
-$$\sigma_r(G_{2n}) = \frac{\sigma_t(G_{2n})}{\sigma(G_{2n})} =  \frac{\sigma_t(G_{2n})}{2}  <  (n - 3) n (n - 1)^2 = \Theta(n^4)$$.
+$$\sigma_r(G_{2n}) = \frac{\sigma_t(G_{2n})}{\sigma(G_{2n})} =  \frac{\sigma_t(G_{2n})}{2}  > \frac{(n - 3) n (n - 1)^2}{2} = \Theta(n^4)$$.
 \\
 S tem sva zaključila preučevanje nepovezanih grafov.
 

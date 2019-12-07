@@ -8,6 +8,7 @@ __pycache__
 *.fdb_latexmk
 *.g6
 *.png
+*.zip
 .ipynb_checkpoints
 .vscode
 env
