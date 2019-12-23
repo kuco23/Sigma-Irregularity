@@ -160,8 +160,10 @@ povezave, kjer je razlika med $d_G(u)$ in $d_G(v)$ za neka $uv \in E(G)$ največ
 Po nekaj testih je začela biti očitna struktura optimalnih grafov in sicer
 njihova oblika je sestavljena iz dveh delov. V prvem nastopa polni podgraf, 
 na drugem pa so povezave redke in je zato podgraf blizu drevesu, kot lahko 
-vidimo na spodnji sliki grafa na 20-ih vozliščih. \\
-\includegraphics[width=\textwidth, height=6cm]{graphics/sample.png} \\
+vidimo na spodnjih slikah grafov na 30, 40 in 50 vozliščih. \\
+\includegraphics[width=8cm, height=5cm]{graphics/opt_sample_30.png}  
+\includegraphics[width=8cm, height=5cm]{graphics/opt_sample_40.png}  \\
+\includegraphics[width=\textwidth, height=5cm]{graphics/opt_sample_50.png} \\
 Ta sestava je primerna, saj razlike med polnim grafom in redkim prispevajo 
 k vrednosti $\sigma_t$, medtem ko vrednost $\sigma$ ostaja enaka, saj so v obeh
 delih grafa sosednje povezave podobnih stopenj. To je skoraj res, a naletimo na posebno povezavo,
@@ -205,8 +207,8 @@ $\sigma_r$ naraščanje. Ta par je izračunan kot $(0.1932, 2.0360)$ in
 njegova aproksimacija naraščanja je prikazana na naslednjem grafu.\\
 \includegraphics[width=\textwidth, height=8cm]{graphics/sigma_opts_aproximation.png}\\
 Rezultati testiranja močno implicirajo kvadratično naraščanje zaporedja 
-$\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n)$, saj pri večjih vzorcih varianca opazno pada,
-hkrati pa se najboljša polinomska aproksimacija približuje $n \to n^2$.
+$(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$, saj pri večjih vzorcih varianca opazno pada,
+hkrati pa se najboljša polinomska aproksimacija rasti približuje $n \to n^2$.
 \pagebreak
 
 \subsection{Hipoteza o stopnjah vozlišč}

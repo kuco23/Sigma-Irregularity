@@ -19,6 +19,7 @@ from pylib import (
     simplePlot, simpleWriteG6, simpleReadG6, simpleSubplot
 )
 
+
 nsim_global, nsim_local = 400, 100
 nrange = range(25, 60, 5)
 sigma_growth = []
@@ -40,6 +41,3 @@ for i in nrange:
     simplePlot(gopt, path=f'riste/graph_{i}')
     sigma_growth.append(ropt)
     print(i, ropt)
-
-with open('riste_shit.txt', 'a') as riste:
-    riste.writelines(list(map(str, sigma_growth)))
