@@ -39,30 +39,28 @@ Ker nas komponentno regularni grafi, za katere to razmerje ni definirano,
 torej v primeru $\sigma(G) = 0$, ne zanimajo, definiramo $\sigma_r(G) = 0$.
 \\\\
 V nadaljevanju bomo zaradi preprostosti prostor grafov na $n$ vozliščih označevali z $\mathscr{G}_n$.
+\\\\
+Najina glavna naloga je torej poiskati maksimalno razmerje $\sigma_r(G)$ za $G \in \mathscr{G}_n$ in graf, 
+pri katerem je razmerje doseženo. To nama bo v pomoč pri preverjanju naslednjih dveh hipotez.
+\begin{itemize}
+\item[(i)] Stopnja naraščanja optimalnega $\sigma_r$ razmerja je $O(n^2)$.
+\item[(ii)] V optimalnem grafu se stopnje vseh sosednjih vozlišč razlikujejo za največ 1.
+\end{itemize}
+Prvo hipotezo bova preverila s polinomsko aproksimacijo $\sigma_r$ naraščanja, 
+ki bo izvedena s pomočjo metode najmanjših kvadratov.
+Drugo pa bova preverila s številom parov vozlišč, ki ne ustrezajo hipotezi in izračunom njihovih stopenjskih razlik.
 
-\subsection{Naloge}
-
-Najina glavna naloga je poiskati maksimalno razmerje $\sigma_r(G)$ za $G \in \mathscr{G}_n$.
-Najprej bova to počela za majhne grafe, potem pa bova z drugačnimi metodami problem reševala še za grafe višjega reda. 
-Po prvih oprijemljivih ugotovitvah naju čakajo naslednje naloge. \\
-
-Za optimalne grafe je dana hipoteza, da so krajišča njihovih povezav vedno na absolutni razliki $1$. \\
-To bova preverila z izračunom števila vozlišč za katera
-to ne velja pri vsakem optimalnem grafu in ta grafično prikazala. \\
-
-Naslednja stvar, ki pa jo bova morala preveriti je ta, da je $(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$ 
-reda $O(n^2)$. 
-Poiskati bova morala še ustrezno konstanto $c$ s katero bo aproksimacija $cn^2$ najustreznejša.
+Proti koncu bova povedala še nekaj splošnega o distribuciji stopenj vozlišč v optimalno dobljenih grafih.
 
 \section{Osnovna Teorija}
 
 \subsection{Maksimalna Stopnja Naraščanja}
 Ker bomo za analizo in primerjavo potrebovali stopnjo naraščanja
 zaporedja $(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$ bo koristno izračunati zgornjo mejo.
+
 Poskušajmo maksimizirati vrednost $\sigma_t(G)$ za dani graf $G$.
-\\\\
 Po premisleku se lahko prepričamo, da bo za graf $G \in \mathscr{G}_n$ največja vrednost $\sigma_t(G)$ dosežena, če
-bodo vsa vozlišča stopnje $n - 1$ ali $0$, saj bo tako kvadratična razlika med njimi največja.
+bodo vsa vozlišča stopenj $n - 1$ in $0$, saj bo tako kvadratična razlika med njimi največja.
 Zanima nas torej število vozlišč s stopnjo $n$, $x$, ki maksimizira funkcijo
 $f(x) = x (n - x)$, saj ta predstavlja število kombinacij parov vozlišč s stopnjo $n - 1$ in $0$.
 Z odvajanjem poiščemo maksimum, ki je dosežen pri $n / 2$, zato velja
@@ -77,7 +75,7 @@ Sledi, da je zgornja meja naraščanja $O(n^4)$.
 Ker sva opazila, da družina nepovezanih grafov doseže maksimalno stopnjo naraščanja,
 se lahko po konstrukciji družine takšnih grafov $G_n$ za $\forall n \in \mathbb{N}$
 osredotočimo samo na povezane grafe.
-\\\\
+
 Konstrukcija grafov $G_n$, za katere ima zaporedje  $(\max_{G_n \in \mathscr{G}_n} \sigma_r(G_n))_n$  stopnjo 
 naraščanja $O(n^4)$ je sledeča.
 Vzamemo $n / 2$ vozlišč in iz njih konstruiramo poln graf
@@ -89,27 +87,25 @@ S tem sva zaključila preučevanje nepovezanih grafov.
 
 \section{Ideja Iskanja Optimalnih Grafov}
 Problem bova reševala v Pythonu in si občasno pomagala s knjižnjico Networkx,  
-s katerim bodo grafično predstavljeni grafi.
+s katero bodo grafično predstavljeni grafi.
 
 \subsection{Metahevristike}
 Za optimalno vrednost $\sigma_r$ na grafih reda $n$ bi morala testirati vse neizomorfne
 grafe tega reda, kar pa bi zahtevalo testiranje vseh grafov $G \in \mathscr{G}_n$, 
-katerih pa je $\Omega\left(2^{\binom{n}{2}}\right)$. Če upoštevamo, da izračun $\sigma_r(G)$ 
-zahteva $\Omega(n^2)$ operacij, dobimo skupno časovno zahtevnost $\Omega\left(n^2 2^{\binom{n}{2}}\right)$.
+katerih pa je $\Omega(2^{\binom{n}{2}})$. Če upoštevamo, da izračun $\sigma_r(G)$ 
+zahteva $\Omega(n^2)$ operacij, dobimo skupno časovno zahtevnost $\Omega(n^2 2^{\binom{n}{2}})$.
 Očitno ta zahtevnost predstavlja problem že za grafe reda $10$, 
-torej bova morala poiskati alternativni pristop v obliki metahevrističnih algoritmov. \\
-
+torej bova morala poiskati alternativni pristop v obliki metahevrističnih algoritmov.
 Ideja bo torej sistematično postopati po prostoru povezanih enostavnih grafov reda $n$ in 
 tako iskati aproksimacijo grafa $G$, ki maksimizira vrednost $\sigma_r$ na tem prostoru.
-
 Za učinkovito delovanje teh procesov pa potrebujemo definirati ustrezno topologijo 
 na prostoru, torej podati pojem bližine, saj jo zahteva večina hevrističnih algoritmov.
-
 To bova naredila med drugim tudi z zaporednim dodajanjem ali odstranjevanjem naključnih povezav v 
 danem grafu, pri čimer morava paziti, da ohranjava povezanost grafa. 
-Torej z drugimi besedami ne odstraniva mostov.\\
+Torej z drugimi besedami ne odstraniva mostov.
+\\\\
 Za te namene sva napisala knjižnjico, ki poda podporo za izbiro teh povezav
-in splošno generiranje naključnih povezanih grafov, skupaj z nekaterimi drugimi orodji.
+in splošno generiranje naključnih povezanih grafov, skupaj še z nekaterimi splošnimi orodji.
 
 \subsection{Simulated Annealing}
 Eden od algoritmov, ki naj bi rešil ta problem je {\em Simulated Annealing}, 
@@ -145,7 +141,6 @@ se lotimo implementacije {\em Simulated Annealing} algoritma.
 
 Med večjimi grafi bomo optimume iskali s pomočjo algoritma SA ({\em Simulated Annealing}). 
 Ta prejme 3 pomembne argumente: število vozlišč, število simulacij in definicijo okolice grafa.
-
 Okolice so lahko poljubne in se delijo na lokalne in globalne.
 Lokalne okolice spreminjajo graf po povezavah, globalne pa
 konstruirajo nov graf, ki ima morda kakšne podobne karakteristike kot prejšnji.
@@ -219,7 +214,7 @@ Rezultati, skupaj z linearno aproksimacijo, so opisani na naslednjem grafu.\\
 Naraščanje je predvsem linearno in sicer sta najboljši linearni aproksiciji koeficientov enaki
 $2.7895$ in $0.5749$, glede na horizontalno zaporedje slik.
 \\\\
-Na levem grafu vidimo, da je vsota stopenj vozišč majhna. Saj je povprečno njena vrednost
+Na levem grafu vidimo, da je vsota stopenj vozišč majhna, saj je povprečno njena vrednost
 le trikratnik števila vozlišč, torej se povprečno vozlišči na razliki stopenj večji od $1$ razlikujeta v stopnji za $3$, 
 kot tudi namiguje koeficient.\\
 Na desnem grafu takoj opazimo, da je naraščanje števila parov vozlišč, ki ne ustrezajo pogoju
