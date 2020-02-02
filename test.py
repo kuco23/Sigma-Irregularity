@@ -1,7 +1,7 @@
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-from pylib import (
+from lib import (
     sigma, sigma_t, sigmaRatio, sigmaArgmax,
     powerAproximation, degreeContinuoutyIndex,
     
