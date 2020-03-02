@@ -85,33 +85,31 @@ $$\sigma_r(G_{2n}) = \frac{\sigma_t(G_{2n})}{\sigma(G_{2n})} =  \frac{\sigma_t(G
 \\
 S tem sva zaključila preučevanje nepovezanih grafov.
 
-\section{Ideja Iskanja Optimalnih Grafov}
-Problem bova reševala v Pythonu in si občasno pomagala s knjižnjico Networkx,  
-s katero bodo grafično predstavljeni grafi.
+\section{Implementacija Meta-hevristik}
 
-\subsection{Metahevristike}
+\subsection {Problem Velikih Grafov}
 Za optimalno vrednost $\sigma_r$ na grafih reda $n$ bi morala testirati vse neizomorfne
 grafe tega reda, kar pa bi zahtevalo testiranje vseh grafov $G \in \mathscr{G}_n$, 
-katerih pa je $\Omega(2^{\binom{n}{2}})$. Če upoštevamo, da izračun $\sigma_r(G)$ 
+katerih je $\Omega(2^{\binom{n}{2}})$. Če upoštevamo, da izračun $\sigma_r(G)$ 
 zahteva $\Omega(n^2)$ operacij, dobimo skupno časovno zahtevnost $\Omega(n^2 2^{\binom{n}{2}})$.
 Očitno ta zahtevnost predstavlja problem že za grafe reda $10$, 
-torej bova morala poiskati alternativni pristop v obliki metahevrističnih algoritmov.
-Ideja bo torej sistematično postopati po prostoru povezanih enostavnih grafov reda $n$ in 
+torej bova morala poiskati alternativni pristop, ki pa bo v obliki meta-hevrističnih algoritmov.
+Ideja bo sistematično postopati po prostoru povezanih enostavnih grafov reda $n$ in 
 tako iskati aproksimacijo grafa $G$, ki maksimizira vrednost $\sigma_r$ na tem prostoru.
-Za učinkovito delovanje teh procesov pa potrebujemo definirati ustrezno topologijo 
-na prostoru, torej podati pojem bližine, saj jo zahteva večina hevrističnih algoritmov.
-To bova naredila med drugim tudi z zaporednim dodajanjem ali odstranjevanjem naključnih povezav v 
-danem grafu, pri čimer morava paziti, da ohranjava povezanost grafa. 
-Torej z drugimi besedami ne odstraniva mostov.
-\\\\
-Za te namene sva napisala knjižnjico, ki poda podporo za izbiro teh povezav
-in splošno generiranje naključnih povezanih grafov, skupaj še z nekaterimi splošnimi orodji.
+
+\subsection {API Podpora}
+Za učinkovito delovanje meta-hevrističnih procesov potrebujemo definirati ustrezno topologijo 
+na prostoru, torej podati pojem bližine. Hkrati morava generirati naključne grafe,
+ki jih bomo preko algoritmov postopoma izboljšavali, 
+torej bo, med drugim, potrebno priskrbeti metode za takšna izboljšavanja. \\
+Vse to vključuje napisana knjižnica, ki poda podporo in splošna orodja, 
+za implementacijo meta-hevrističnih algoritmov.
 
 \subsection{Simulated Annealing}
-Eden od algoritmov, ki naj bi rešil ta problem je {\em Simulated Annealing}, 
-katerega implementacija je končana.
+Implementiran meta-hevrističen algoritem bo  {\em Simulated Annealing} (SA), 
+osnovna uporaba katerega bo pojasnena skozi nalogo. 
 Algoritem je uporabljen za iskanje vseh optimalnih grafov v nadaljevanju naloge in parametriziran
-s skupino parametrov, ki bo opisana kasneje.
+s skupino parametrov, ki omogočajo njegovo skromno posplošitev.
 
 \section{Reševanje Problema}
 
@@ -225,7 +223,7 @@ skupaj z naraščanjem razlik stopenj sosednih vozlišč.
 \\\\
 Vrnimo se nazaj na problem optimalnega povezanja polnega podgrafa s praznim. 
 Sva mnenja, da so rezultati pozitivna indikacija na to, da se ta pot naravno formira na način, 
-ki favorizira minimizacijo $\sigma$ vrednosti napram maksimizacije $\sigma_t$ vrednosti.
+ki favorizira minimizacijo $\sigma$ vrednosti napram maksimizaciji $\sigma_t$ vrednosti.
 Torej grafi poskušajo poskrbeti za zvezni prehod iz polnega podgrafa k redkemu in za to 
 žrtvujejo nekaj vozlišč, kar pa se na koncu pozna pri majhnih razlikah stopenj.
 
